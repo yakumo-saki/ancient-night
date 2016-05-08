@@ -1,0 +1,41 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "noImplicitAny": false,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "outDir": "../../app/"
+    },
+    "filesGlob": [
+        "../shared/**/*.ts",
+        "*/**/*.ts",
+        "**/*.ts",
+        "**/*.tsx"
+    ],
+    "files": [
+        "../shared/consts/IpcCommand.ts",
+        "../shared/consts/IpcEvent.ts",
+        "../shared/DataType.ts",
+        "../shared/Global.ts",
+        "../shared/GlobalSecret.ts",
+        "../shared/interfaces/Log.ts",
+        "../shared/interfaces/TabGetNewParams.ts",
+        "../shared/interfaces/TabGroupSetting.ts",
+        "../shared/interfaces/TabListenParams.ts",
+        "../shared/interfaces/TabSetting.ts",
+        "../shared/interfaces/TwitterApi.ts",
+        "modules/Logger.ts",
+        "modules/MainTabViewModel.ts",
+        "modules/MainViewModel.ts",
+        "modules/RootViewModel.ts",
+        "typings/bundle.d.ts",
+        "typings/es6-promise/es6-promise.d.ts",
+        "typings/github-electron/github-electron.d.ts",
+        "typings/jquery/jquery.d.ts",
+        "typings/knockout.mapping/knockout.mapping.d.ts",
+        "typings/knockout/knockout.d.ts",
+        "typings/node/node.d.ts"
+    ]
+}

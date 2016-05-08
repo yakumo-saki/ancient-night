@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Photon</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="lib/photon/css/photon.min.css">
+    <link rel="stylesheet" href="css/ancient.css">
+
+    <!-- Javascript -->
+    <script src="lib/jquery/jquery-2.1.4.min.js"></script>
+    <script src="lib/knockout/knockout-3.4.0.js"></script>
+    <script src="lib/knockout/knockout.mapping.js"></script>
+    <script src="lib/twitter-relative-time/twitter.relative.time.min.js"></script>
+    <script src="lib/mousetrap/mousetrap.min.js"></script>
+  </head>
+  <body>
+
+    <div class="window" data-bind="ifnot: root.activeGroup">
+      <header class="toolbar toolbar-header">
+        <h1 class="title">Ancient Night</h1>
+      </header>
+
+      <div>
+         起動エラーっぽい
+      </div>
+    </div>
+
+    <!-- ko ifnot: root.activeGroup -->
+    <div class="window">
+
+      <header class="toolbar toolbar-header">
+        <h1 class="title">Ancient Night</h1>
+      </header>
+      <div class="pane">
+        アカウントが登録されていません。<br>
+        メニューからアカウント→追加を選択して下さい。
+      </div><!-- pane -->
+      <!-- /ko --><!-- activeTab -->
+
+      <footer class="toolbar toolbar-footer">
+        <h1 class="title pull-right">動いてないです</h1>
+      </footer>
+    </div>
+    <!-- /ko -->
+
+    <!-- ko if: root.activeGroup -->
+    <div class="window" data-bind="with: root">
+
+      <header class="toolbar toolbar-header">
+        <h1 class="title" data-bind="text: appName"></h1>
+
+        <div class="toolbar-actions">
+            <button class="btn btn-large btn-default" data-bind="click: refreshTimeline" id="btn-jp">
+              <span class="icon icon-cw"></span>
+              &nbsp;表示更新
+            </button>
+            <!--
+            <button class="btn btn-large btn-default">
+              <span class="icon icon-check"></span>
+              &nbsp;既読にする
+            </button>
+            -->
+            <div class="btn-group">
+              <button class="btn btn-large btn-default">
+                <span class="icon icon-user"></span>
+              </button>
+              <button class="btn btn-large btn-default">
+                <span class="icon icon-chat"></span>
+              </button>
+            </div>
+            <select class="" data-bind="selected: activeGroup, options: groups, optionsText: 'name', value: '_id'">
+               <option>account1</option>
+               <option>account2</option>
+            </select>
+            <button class="btn btn-large btn-default btn-dropdown pull-right">
+              <span class="icon icon-newspaper"></span>
+            </button>
+        </div>
+      </header>
+
+      <div>
+        <!--
+        <img src="notfound" height="32" width="32" style="position: absolute; top:0 right:0"/>
+        -->
+        <textarea id="js_tweetText" class="selectable-text" style="margin:2px; width: 100%;"></textarea>
+      </div>
+      
+      <!-- ko if: activeViewModel -->
+      <!-- ko with: activeViewModel -->
+      <div class="tab-group">
+        <!-- ko foreach: tabs -->
+        <div class="tab-item" data-bind="css: { active: tabActive }, click: $parent.switchTab">
+          <span class="icon icon-cancel icon-close-tab"></span>
+          <span data-bind="text: tabSetting.name">タイムライン</span>
+        </div>
+        <!-- /ko -->
+      </div><!-- tab-group -->
+
+      <!-- ko with: activeTab -->
+      <div class="pane">
+        <ul class="list-group tweet">
+
+        	<!-- ko if: tweets().length == 0 -->
+        	<li class="list-group-item">
+        		<div class="media-body" style="position: relative;">
+        			<strong>エラー</strong>
+              <div style="text-wrap: normal; word-break: break-all;">表示するツイートが存在しない</div>
+        		</div>
+        	</li>
+        	<!-- /ko -->
+          
+        	<!-- ko foreach: tweets -->
+        	<li class="list-group-item tweet">
+            <!-- ko if: $data.type == 0 || $data.type == 1 --><!-- tweet or mention -->
+        		<img class="media-object pull-left tweet image" width="48" height="48"
+        			data-bind="attr: { src: data.user.profile_image_url_https }">
+            <!-- /ko -->
+            <!-- ko if: $data.type == 2 --><!-- dm -->
+        		<img class="media-object pull-left tweet image" width="48" height="48"
+        			data-bind="attr: { src: data.sender.profile_image_url_https }">
+            <!-- /ko -->
+        		<div class="media-body" style="position: relative;">
+              <!-- ko if: $data.type == 0 || $data.type == 1 --><!-- tweet or mention -->
+        			<strong class="tweet name" data-bind="text: data.user.name">名前</strong>
+              <!-- /ko -->
+              <!-- ko if: $data.type == 2 --><!-- dm -->
+        			<strong class="tweet name" data-bind="text: data.sender.name">名前</strong>
+              <!-- /ko -->
+              
+              <!-- ko if: $data.type == 0 --><!-- tweet -->
+              <div class="tweet text" data-bind="text: data.text">内容</div>
+        			<div class="tweet datetime" data-bind="text: new Date(data.created_at).toTwitterRelativeTime('ja')"></div>
+              <!-- /ko -->
+              <!-- ko if: $data.type == 1 --><!-- mention -->
+              <div class="tweet text" data-bind="text: data.text">内容</div>
+        			<div class="tweet text" data-bind="text: new Date(data.created_at).toTwitterRelativeTime('ja')"></div>
+              <!-- /ko -->
+              <!-- ko if: $data.type == 2 --><!-- dm -->
+              <div class="tweet text" data-bind="text: data.text">内容</div>
+        			<div class="tweet text" data-bind="text: new Date(data.created_at).toTwitterRelativeTime('ja')"></div>
+              <!-- /ko -->
+        		</div>
+            
+        	</li>
+        	<!-- /ko -->
+
+        </ul>
+      </div><!-- pane -->
+      <!-- /ko --><!-- with activeTab -->
+      <!-- /ko --><!-- with activeViewModel -->
+
+      <footer class="toolbar toolbar-footer">
+        <h1 class="title pull-right" data-bind="text: activeViewModel.footerMessage"></h1>
+      </footer>
+      <!-- /ko --><!-- if activeViewModel -->
+
+    </div><!-- window -->
+    <!-- /ko -->
+  </body>
+
+<script>
+    window.onload = function() {
+        window.$ = require('jquery');
+
+        if (Global.debug) {
+          currentWindow.openDevTools();
+        }
+
+        
+        window.rootViewModel = new RootViewModel();
+        window.rootViewModel.initialize();
+
+        // この辺はあとで初期化を入れる
+        ko.applyBindings({
+          'root' : window.rootViewModel
+        });
+    };
+
+    var remote = require('remote');
+
+    var util = require('util');
+    var currentWindow = remote.getCurrentWindow();
+    var dialog = remote.require('dialog');
+
+    var moment = require('moment');
+    var Global = require('../shared/Global');
+
+    var RootViewModel = require('../renderer/Modules/RootViewModel');
+
+    function hello(){
+        var options = {
+            title: 'ダイアログのタイトル',
+            type: 'info',
+            buttons: ['OK', 'Cancel'],
+            message: 'メッセージA',
+            detail: 'hello'
+        };
+        dialog.showMessageBox(currentWindow, options);
+    }
+</script>
+<script>
+
+Mousetrap(document.getElementById('js_tweetText')).bind("mod+enter",function() {
+    mainViewModel.tweet(document.getElementById('js_tweetText').value);
+  });
+</script>
+<script>
+var loginWindow;
+</script>
+</html>

@@ -1,0 +1,49 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "noImplicitAny": false,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "outDir": "../../app/"
+    },
+    "filesGlob": [
+        "../shared/**/*.ts",
+        "*/**/*.ts",
+        "**/*.tsx",
+        "**/*.ts"
+    ],
+    "files": [
+        "../shared/consts/IpcCommand.ts",
+        "../shared/consts/IpcEvent.ts",
+        "../shared/DataType.ts",
+        "../shared/Global.ts",
+        "../shared/GlobalSecret.ts",
+        "../shared/interfaces/Log.ts",
+        "../shared/interfaces/TabGetNewParams.ts",
+        "../shared/interfaces/TabGroupSetting.ts",
+        "../shared/interfaces/TabListenParams.ts",
+        "../shared/interfaces/TabSetting.ts",
+        "../shared/interfaces/TwitterApi.ts",
+        "modules/AncientNight.ts",
+        "modules/ANDatabase.ts",
+        "modules/ANDBCacheAdapter.ts",
+        "modules/EventDispatcher.ts",
+        "modules/LogFromRenderer.ts",
+        "modules/TwitterClient.ts",
+        "typings/bundle.d.ts",
+        "typings/es6-promise/es6-promise.d.ts",
+        "typings/express-serve-static-core/express-serve-static-core.d.ts",
+        "typings/express/express.d.ts",
+        "typings/github-electron/github-electron.d.ts",
+        "typings/localForage/localForage.d.ts",
+        "typings/lodash/lodash.d.ts",
+        "typings/log4js/log4js.d.ts",
+        "typings/mime/mime.d.ts",
+        "typings/nedb/nedb.d.ts",
+        "typings/node/node.d.ts",
+        "typings/serve-static/serve-static.d.ts",
+        "app.ts"
+    ]
+}

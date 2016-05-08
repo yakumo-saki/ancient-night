@@ -1,0 +1,15 @@
+ul.tweet * {
+  cursor: auto;
+  -webkit-user-drag: text;
+  -webkit-user-select: text;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.tweet.datetime {
+  position: absolute; top: 0; right: 0;
+}
+
+.tweet.text {
+  word-break: break-all;
+}
