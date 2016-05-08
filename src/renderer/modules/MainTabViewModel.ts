@@ -20,7 +20,7 @@ class MainTabViewModel {
 	/** タブのID */
 	id:string = this.uuid.v4().substring(0,8); // 衝突したら桁数増やす
 	
-	tweets: KnockoutObservableArray<TwitterEventEx> = ko.observableArray([]);
+	tweets: KnockoutObservableArray<TwitterApi.TwitterEvent> = ko.observableArray([]);
 
 	tabActive: KnockoutObservable<boolean> = ko.observable(false);
 
@@ -53,7 +53,7 @@ class MainTabViewModel {
 	
 	newEvent(event:TwitterApi.TwitterEvent) {
 		// console.log(event);
-		let ev = <TwitterEvent> event; 
+		let ev = <TwitterApi.TwitterEvent> event; 
 		
 		this.tweets.push(ev);
 	}
