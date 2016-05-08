@@ -7,6 +7,8 @@ import TabListenParams = require('../../shared/interfaces/TabListenParams');
 import TabGetNewParams = require('../../shared/interfaces/TabGetNewParams');
 import TwitterApi = require('../../shared/interfaces/TwitterApi');
 
+import * as _ from "lodash"; // 実際は lodashを scriptタグで読んでる
+
 class MainTabViewModel {
 
 	log = new Logger('MainTabViewModel');
@@ -39,11 +41,15 @@ class MainTabViewModel {
 	// data
 	// ___________________________
 	getTimeline():void {
-		this.log.debug('getTimeline id=>' + this.id);
+		
+		var maxIdTweet = _.maxBy(this.tweets(), (tw) => { return tw.id_str});
+		var maxId = (maxIdTweet == undefined ? null: maxIdTweet.id_str);
+		
+		this.log.debug('getTimeline id=>' + this.id + " minId = " + maxId);
 		var getParams = new TabGetNewParams();
 		getParams.tabId = this.id;
 		getParams.tabSetting = this.tabSetting;
-		getParams.minId = null;
+		getParams.minId = maxId;
 		this.ipc.send(IPC_COMMAND.TAB_GET_NEW, getParams);
 	}
 
@@ -55,7 +61,7 @@ class MainTabViewModel {
 		// console.log(event);
 		let ev = <TwitterApi.TwitterEvent> event; 
 		
-		this.tweets.push(ev);
+		this.tweets.unshift(ev);
 	}
 
 	// /**

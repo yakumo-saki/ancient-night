@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "jquery": "^2.2.3",
+    "lodash": "^4.11.2",
     "log4js": "^0.6.36",
     "moment": "^2.10.6",
     "nedb": "^1.8.0",

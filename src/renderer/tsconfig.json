@@ -37,6 +37,7 @@
         "typings/jquery/jquery.d.ts",
         "typings/knockout.mapping/knockout.mapping.d.ts",
         "typings/knockout/knockout.d.ts",
+        "typings/lodash/lodash.d.ts",
         "typings/node/node.d.ts"
     ]
 }

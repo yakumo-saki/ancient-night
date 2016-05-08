@@ -48,19 +48,19 @@ class TwitterClient extends events.EventEmitter {
 		});
 	}
     
-    getTimeline(count:number, minId:number):void {
+    getTimeline(count:number, minId:string):void {
         this.get("statuses/home_timeline", TwitterApi.Type.Tweet, count, minId);
 	}
 
-    getMention(count:number, minId:number):void {
+    getMention(count:number, minId:string):void {
         this.get("statuses/mentions_timeline", TwitterApi.Type.Mention, count, minId);
 	}
 
-    getDirectMessage(count:number, minId:number):void {
+    getDirectMessage(count:number, minId:string):void {
         this.get("direct_messages", TwitterApi.Type.DirectMessage, count, minId);
 	}
     
-    get(entrypoint:string, type:TwitterApi.Type, count:number, minId:number):void {
+    get(entrypoint:string, type:TwitterApi.Type, count:number, minId:string):void {
         let param:any = {count: count};
         if (minId != undefined) param.since_id = minId;
         

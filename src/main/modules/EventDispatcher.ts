@@ -69,7 +69,13 @@ class EventDispatcher extends events.EventEmitter {
      */
     public publish() {
        this.log.debug('publish Queue size = ' + this.queue.length + " subscribers = " + this.subscribers.length);
-       this.queue.forEach( (item) => {
+       
+       // イベントを古い順に並び替えている。これはレンダラ側でツイート表示位置を適切な場所にする
+       // コードを書くまでのつなぎである。
+       let que = _.sortBy(this.queue, (ev) => { return ev.id_str } )
+       this.queue.length = 0;
+       
+       que.forEach( (item) => {
          // サブスクライバごとに送信するか決める
          this.subscribers.forEach((sub) => {
             //  this.log.debug("event type=" + item.type + " subscriber type=" + sub.tabSetting.type);
@@ -80,7 +86,6 @@ class EventDispatcher extends events.EventEmitter {
              }
          })
        });
-       this.queue.length = 0;
        this.log.debug('publish complete Queue size = ' + this.queue.length);
     }
     

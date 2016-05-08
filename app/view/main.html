@@ -14,6 +14,7 @@
     <script src="lib/knockout/knockout.mapping.js"></script>
     <script src="lib/twitter-relative-time/twitter.relative.time.min.js"></script>
     <script src="lib/mousetrap/mousetrap.min.js"></script>
+    <script src="lib/lodash/lodash.js"></script>
   </head>
   <body>
 
@@ -99,7 +100,7 @@
       </div><!-- tab-group -->
 
       <!-- ko with: activeTab -->
-      <div class="pane">
+      <div class="pane tweet">
         <ul class="list-group tweet">
 
         	<!-- ko if: tweets().length == 0 -->
@@ -112,21 +113,23 @@
         	<!-- /ko -->
           
         	<!-- ko foreach: tweets -->
-        	<li class="list-group-item tweet">
+        	<li class="list-group-item tweet" data-bind="css : { normal: $data.type == 0, mention: $data.type == 1, dm: $data.type == 2}">
             <!-- ko if: $data.type == 0 || $data.type == 1 --><!-- tweet or mention -->
-        		<img class="media-object pull-left tweet image" width="48" height="48"
+        		<img class="media-object pull-left tweet icon" width="48" height="48"
         			data-bind="attr: { src: data.user.profile_image_url_https }">
             <!-- /ko -->
             <!-- ko if: $data.type == 2 --><!-- dm -->
-        		<img class="media-object pull-left tweet image" width="48" height="48"
+        		<img class="media-object pull-left tweet icon" width="48" height="48"
         			data-bind="attr: { src: data.sender.profile_image_url_https }">
             <!-- /ko -->
         		<div class="media-body" style="position: relative;">
               <!-- ko if: $data.type == 0 || $data.type == 1 --><!-- tweet or mention -->
         			<strong class="tweet name" data-bind="text: data.user.name">名前</strong>
+              <strong class="tweet screen_name" data-bind="text: '@' + data.user.screen_name">@name</strong>
               <!-- /ko -->
               <!-- ko if: $data.type == 2 --><!-- dm -->
         			<strong class="tweet name" data-bind="text: data.sender.name">名前</strong>
+              <strong class="tweet screen_name" data-bind="text: '@' + data.sender.screen_name">@name</strong>
               <!-- /ko -->
               
               <!-- ko if: $data.type == 0 --><!-- tweet -->
