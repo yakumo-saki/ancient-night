@@ -79,54 +79,55 @@ class ANDatabase {
             callback(docs);
         });
     }
+
+    TweetCache(events:Array<TwitterApi.TwitterEvent>) {
+        Promise.resolve().then(() => {
+            this.deleteTweetCache(events);
+        }).then((result) => {
+            return this.insertTweetCache(events);
+        }).catch((err) => {
+            this.log.error(err);
+        });
+        
+        this.db.tweets.count({}, (err, count) => {
+            if (!err) {
+                this.log.info('Tweet cache count = ' + count);
+            }    
+        });
+    }
     
-    testInsert() {
-        
-    }
-
-    test() {
-        // insert
-        this.db.users.insert({name: 'hoge'});
-        this.db.users.insert({name: 'fuga'}); 
-        this.db.users.insert({name: 'uga'});
-        
-        this.db.users.insert([
-            {name: 'foo'},
-            {name: 'bar', _id: 1234}
-        ], (err:any, newDoc:any) => {
-            console.log("this is " + this.toString() );
-            this.log.debug("[INSERT]");
-            this.log.debug(newDoc);
-        }); 
-
-        // find
-        this.db.users.find({name: 'fuga'},
-        (err:any, docs:any) => {
-            this.log.debug("[FIND]");
-            this.log.debug(docs);
-        });
-        this.db.users.find({name: /f*uga/},
-            (err:any, docs:any) => {
-                this.log.debug("[FIND F*]");
-                this.log.debug(docs);
-        });
-
-        // remove
-        this.db.users.remove(
-            {name: 'fuga'},
-            {multi: true},
-            (err:any, numRemoved: number) => {
-                this.log.debug("[REMOVE]");
-                this.log.debug(numRemoved);
-        });
-        this.db.users.remove(
-            {name: 'uga'},
-            {multi: true},
-            (err:any, numRemoved: number) => {
-            this.log.debug("[REMOVE]");
-            this.log.debug(numRemoved);
+    insertTweetCache(events:Array<TwitterApi.TwitterEvent>):Promise<void> {
+        this.log.debug('Inserting event ' + events.length);
+        return new Promise<void>((resolve, reject) => {
+            this.db.tweets.insert(events, (err, newDoc) => {
+                if (!err) {
+                    resolve(newDoc);                    
+                } else {
+                    reject(err);
+                }
+            });
         });
 
     }
+
+    deleteTweetCache(events:Array<TwitterApi.TwitterEvent>):Promise<number> {
+        this.log.debug('Deleting event ' + events.length);
+        var ids = new Array();
+        events.forEach( (ev) => { ids.push(ev.id_str) });
+        this.db.tweets.persistence.compactDatafile();
+        
+        return new Promise<number>((resolve, reject) => {
+            this.db.tweets.remove({ id_str : { $in: ids } }, {multi: true}, (err, numRemoved) => {
+                if (!err) {
+                    this.log.debug('Deleted event ' + numRemoved);
+                    resolve(numRemoved);
+                } else {
+                    reject(err);
+                }
+            });
+        });
+
+    }
+
 }
 export = ANDatabase;

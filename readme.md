@@ -4,10 +4,8 @@
 
 ## ちゃんと動きますか？
 
-まだ動きません。動いている夜フクロウライクなクライアントをお求め
-の場合は、
+あんまりまともに動きません。
 
-https://github.com/k0kubun/Nocturn
-Nocturn
-
-こちらをおすすめ致します。
+## Custom LICENSE
+MIT License, except below.
+/app/resources/sound/* (Not included yet)

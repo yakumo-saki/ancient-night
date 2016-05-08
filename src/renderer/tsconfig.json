@@ -6,6 +6,7 @@
         "noImplicitAny": false,
         "removeComments": true,
         "preserveConstEnums": true,
+        "sourceMap": true,
         "outDir": "../../app/"
     },
     "filesGlob": [

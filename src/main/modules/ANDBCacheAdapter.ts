@@ -17,6 +17,8 @@ class ANDBCacheAdapter {
     constructor(dispatcher:EventDispatcher, private db:ANDatabase) {
         dispatcher.on(EventDispatcher.EV_INCOMING_EVENT, (events:Array<any>) => {
             this.log.debug('Incoming event ' + events.length);
+            
+            this.db.TweetCache(events);
         })
     }
 
