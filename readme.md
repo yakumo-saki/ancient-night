@@ -6,9 +6,14 @@
 
 あんまりまともに動きません。
 
-## Custom LICENSE
-MIT License, except below.
-/app/resources/sound/* (Not included yet)
+## License
+MIT License, except below. (以下を除いて MIT Licenceです)
+
+/app/resources/sound/* 
+(Not included yet)
+
+/app/resources/icon/*
+FLAT ICON DESIGN http://flat-icon-design.com/
 
 ## コンパイル
 TwitterのWebサイトから、コンシューマキーとコンシューマシークレットを入手して
