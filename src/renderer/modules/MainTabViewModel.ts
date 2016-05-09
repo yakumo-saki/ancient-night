@@ -11,11 +11,14 @@ import * as _ from "lodash"; // 実際は lodashを scriptタグで読んでる
 
 class MainTabViewModel {
 
-	log = new Logger('MainTabViewModel');
+	private log = new Logger('MainTabViewModel');
 	
 	private uuid = require('uuid');
 	
 	private ipc:Electron.IpcRenderer = require('electron').ipcRenderer;
+
+	/** 初期化中フラグ. 初期化中は通知処理を行わない */
+	public initializing:KnockoutObservable<boolean> = ko.observable(true);
 
 	// data(flag)
 	// ___________________________

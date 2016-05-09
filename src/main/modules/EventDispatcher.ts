@@ -34,6 +34,9 @@ class EventDispatcher extends events.EventEmitter {
       });
     }
     
+    /** 
+     * イベントをキューに追加します.
+     */
     public pushEvent(events:Array<any>, typeHint:TwitterApi.Type) {
         this.log.debug('new Event size = ' + events.length);
         
@@ -61,9 +64,20 @@ class EventDispatcher extends events.EventEmitter {
         this.log.debug('new Queue size = ' + this.queue.length);
 
         // キャッシュ用にイベント発行
-        this.emit(EventDispatcher.EV_INCOMING_EVENT, events);
+        this.emit(EventDispatcher.EV_INCOMING_EVENT, eventList);
     }
     
+    /** 
+     * イベントをキューに追加します.
+     * このメソッドでは、キャッシュからのイベントのみを受け付けます。
+     */
+    public pushEventFromCache(events:Array<TwitterApi.TwitterEvent>) {
+        this.log.debug("FromCache count = " + events.length);
+        
+        Array.prototype.push.apply(this.queue, events);
+        
+    }
+
     /**
      * イベントを送信する.
      */
@@ -75,6 +89,7 @@ class EventDispatcher extends events.EventEmitter {
        let que = _.sortBy(this.queue, (ev) => { return ev.id_str } )
        this.queue.length = 0;
        
+       let sendCount = 0;
        que.forEach( (item) => {
          // サブスクライバごとに送信するか決める
          this.subscribers.forEach((sub) => {
@@ -83,10 +98,11 @@ class EventDispatcher extends events.EventEmitter {
                  let id = IPC_EVENT.GET_TAB_NEW_EVENT + sub.tabId;
                 //  this.log.debug("sending event to " + id);
                  this.mainWindow.webContents.send(IPC_EVENT.GET_TAB_NEW_EVENT + sub.tabId, item);
+                 sendCount++;
              }
          })
        });
-       this.log.debug('publish complete Queue size = ' + this.queue.length);
+       this.log.debug('publish complete Queue size = ' + this.queue.length + " event sent = " + sendCount);
     }
     
     subscribe(arg:TabListenParams) {

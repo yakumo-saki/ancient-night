@@ -14,7 +14,10 @@ import TabGroupSetting = require('../../shared/interfaces/TabGroupSetting');
  */
 class MainViewModel {
 
-	log = new Logger('MainViewModel');
+	private log = new Logger('MainViewModel');
+
+	/** 初期化中フラグ. 初期化中は通知処理を行わない */
+	initializing:KnockoutObservable<boolean> = ko.observable(true);
 
 	// data(flag)
 	// ___________________________
@@ -37,6 +40,11 @@ class MainViewModel {
 		})
 		this.switchTab( this.tabs()[0] );
 		this.footerMessage('初期化した'); 
+	}
+	
+	setInitializing(flag:boolean) {
+		this.initializing(flag);
+		this.tabs().forEach( (t) => { t.initializing(flag)});		
 	}
 	
 	refreshTimeline():any {

@@ -80,7 +80,24 @@ class ANDatabase {
         });
     }
 
-    TweetCache(events:Array<TwitterApi.TwitterEvent>) {
+    /** キャッシュされているイベントを取得します. */
+    getTweetCache():Promise<Array<TwitterApi.TwitterEvent>> {
+        return new Promise<Array<TwitterApi.TwitterEvent>>((resolve, reject) => {
+            this.db.tweets.find({})
+                          .sort({id_str: -1})
+                          .limit(2000)
+                          .exec((err, doc) => {
+                if (!err) {
+                    resolve(doc);                    
+                } else {
+                    reject(err);
+                }
+            });
+        });
+    }
+
+    /** イベントをDBにキャッシュします. */
+    putTweetCache(events:Array<TwitterApi.TwitterEvent>) {
         Promise.resolve().then(() => {
             this.deleteTweetCache(events);
         }).then((result) => {
@@ -96,7 +113,7 @@ class ANDatabase {
         });
     }
     
-    insertTweetCache(events:Array<TwitterApi.TwitterEvent>):Promise<void> {
+    private insertTweetCache(events:Array<TwitterApi.TwitterEvent>):Promise<void> {
         this.log.debug('Inserting event ' + events.length);
         return new Promise<void>((resolve, reject) => {
             this.db.tweets.insert(events, (err, newDoc) => {
@@ -110,7 +127,7 @@ class ANDatabase {
 
     }
 
-    deleteTweetCache(events:Array<TwitterApi.TwitterEvent>):Promise<number> {
+    private deleteTweetCache(events:Array<TwitterApi.TwitterEvent>):Promise<number> {
         this.log.debug('Deleting event ' + events.length);
         var ids = new Array();
         events.forEach( (ev) => { ids.push(ev.id_str) });

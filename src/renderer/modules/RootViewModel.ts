@@ -6,19 +6,19 @@ import Logger = require('./Logger');
 import MainViewModel = require('./MainViewModel');
 
 /**
- * アカウントを纏めるビューモデル.
- * これが最上位
+ * 最上位ビューモデル.
  */
 class RootViewModel {
 
-	log = new Logger('RootViewModel');
+	private log = new Logger('RootViewModel');
 
 	appName: KnockoutObservable<string> = ko.observable(CONST.APP_NAME);
 
 	ipc:Electron.IpcRenderer = require('electron').ipcRenderer;
 
-	// data
-	// ___________________________
+	/** 初期化中フラグ. 初期化中は通知処理を行わない */
+	initializing:KnockoutObservable<boolean> = ko.observable(false);
+
 	/** ビューモデル。タブ一覧等を持つ。アカウントごとに１個. */
 	// viewModels: KnockoutObservableArray<MainViewModel> = ko.observableArray([]);
 	/** アクティブなアカウントのビューモデル。タブ一覧等を持つ */
@@ -42,11 +42,10 @@ class RootViewModel {
 	}
 
 	onNeedAccountRefresh() {
-		// TODO
-		alert('needAccountRefresh');
-				 
+		this.ipc.send(IPC_COMMAND.GET_ACCOUNTS);			 
 	}
 
+	/** タブグループ情報を更新した際の処理 */
 	onGetTabGroupsResult(tabGroups) {
 		this.log.debug('onGetTabGroupsResult');
 		// this.log.debug(JSON.stringify(accounts));
@@ -63,8 +62,19 @@ class RootViewModel {
 		}
 		
 		// this.accounts(accounts);
+		// TODO データを破棄してしまうので、キャッシュから再度イベントを流して貰う
+		this.initializing(true);
+		this.activeViewModel().setInitializing(true);
+
+		// 完了したら初期化中フラグを戻す
+		this.ipc.once(IPC_EVENT.GET_INITIAL_COMPLETE, () => {
+			this.initializing(false);
+			this.activeViewModel().setInitializing(false);			
+		});
+		this.ipc.send(IPC_COMMAND.TAB_GET_INITIAL);
 	}
 
+	/** タブグループ情報を更新した際の処理 */
 	onGroupSelected() {
 		this.log.debug('onGroupSelected');
 		

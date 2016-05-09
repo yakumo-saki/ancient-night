@@ -106,6 +106,9 @@ class AncientNight {
     ipc.on(IPC_COMMAND.TAB_GET_NEW, (event:any, arg:TabGetNewParams) => {
         this.refreshTimeline(arg);
     });
+    ipc.on(IPC_COMMAND.TAB_GET_INITIAL, (event:any, arg:TabGetNewParams) => {
+        this.getInitialTimeline();
+    });
 
   }
 
@@ -175,6 +178,23 @@ class AncientNight {
       } else if (arg.tabSetting.type == TwitterApi.Type.DirectMessage) {
         client.getDirectMessage(100, arg.minId); 
       }     
+  }
+  
+  /**
+   * キャッシュからイベントを発行しなおします.
+   */
+  getInitialTimeline() {
+    Promise.resolve().then(() => {
+      return this.DB.getTweetCache();
+    }).then((result) => {
+      this.eventDispatcher.pushEventFromCache(result);
+      this.eventDispatcher.publish();
+
+      this.mainWindow.webContents.send(IPC_EVENT.GET_INITIAL_COMPLETE);
+      return Promise.resolve();
+    }).catch((err) => {
+      this.log.error(err);
+    });
   }
   
   /** 

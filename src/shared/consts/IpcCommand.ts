@@ -1,6 +1,12 @@
-export const PING = 'ping';
-export const LOG = 'LOG'; // パラメタ TabGetNewParams
+export const LOG = 'LOG'; // パラメタ Log
 export const GET_ACCOUNTS = 'GET_ACCOUNTS';
 export const GET_TAB_GROUPS = 'GET_TAB_GROUPS';
-export const TAB_LISTEN = 'TAB_LISTEN'; // パラメタ TabListenParams
+
+/** イベント受信登録します. パラメタは TabListenParams */
+export const TAB_LISTEN = 'TAB_LISTEN';
+
+/** イベント受信登録します. パラメタは TabListenParams */
 export const TAB_GET_NEW = 'TAB_GET_NEW'; // パラメタ TabGetNewParams
+
+/** 初期データをキャッシュから取得 パラメタ なし */
+export const TAB_GET_INITIAL = 'TAB_GET_INITIAL'; 
