@@ -1,7 +1,7 @@
 import IPC_EVENT = require('../../shared/consts/IpcEvent');
 import IPC_COMMAND = require('../../shared/consts/IpcCommand');
 
-import Log = require('../../shared/interfaces/Log');
+import Log = require('../../shared/interfaces/IpcData');
 
 class Logger {
     

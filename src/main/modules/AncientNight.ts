@@ -9,9 +9,7 @@ import IPC_EVENT = require('../../shared/Consts/IpcEvent');
 import IPC_COMMAND = require('../../shared/Consts/IpcCommand');
 import GlobalSecret = require('../../shared/GlobalSecret');
 
-import TabSetting = require('../../shared/interfaces/TabSetting');
-import TabListenParams = require('../../shared/interfaces/TabListenParams');
-import TabGetNewParams = require('../../shared/interfaces/TabGetNewParams');
+import IpcData = require('../../shared/interfaces/IpcData');
 
 import EventDispatcher = require('./EventDispatcher');
 import ANDatabase = require('./ANDatabase');
@@ -101,10 +99,10 @@ class AncientNight {
     ipc.on(IPC_COMMAND.GET_TAB_GROUPS, (event:any, arg:any) => {
         this.refreshTabGroups();
     });
-    ipc.on(IPC_COMMAND.TAB_GET_NEW, (event:any, arg:TabGetNewParams) => {
+    ipc.on(IPC_COMMAND.TAB_GET_NEW, (event:any, arg:IpcData.TabGetNewParams) => {
         this.refreshTimeline(arg);
     });
-    ipc.on(IPC_COMMAND.TAB_GET_INITIAL, (event:any, arg:TabGetNewParams) => {
+    ipc.on(IPC_COMMAND.TAB_GET_INITIAL, (event:any, arg:IpcData.TabGetNewParams) => {
         this.getInitialTimeline();
     });
 
@@ -164,7 +162,7 @@ class AncientNight {
     });
   }
   
-  refreshTimeline(arg:TabGetNewParams) {
+  refreshTimeline(arg:IpcData.TabGetNewParams) {
       let client = this.twitterClients[arg.tabSetting.account_id];
       if (client == null) throw new Error("client is null id=" + arg.tabSetting.account_id);
 

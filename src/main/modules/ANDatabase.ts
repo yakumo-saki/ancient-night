@@ -1,6 +1,5 @@
 import TwitterApi = require('../../shared/interfaces/TwitterApi');
-import TabSetting = require('../../shared/interfaces/TabSetting');
-import TabGroupSetting = require('../../shared/interfaces/TabGroupSetting');
+import IpcData = require('../../shared/interfaces/IpcData');
 
 /**
  * DBアクセス周り.
@@ -25,36 +24,37 @@ class ANDatabase {
         this.log.debug('db load done..');
     }
 
-    addAccount(account:any):Promise<TabGroupSetting> {
+    addAccount(account:any):Promise<IpcData.TabGroupSetting> {
         this.log.debug(JSON.stringify(account));
-        this.db.accounts.insert({account});
-        this.log.debug('db addAccount done' + JSON.stringify(account));
+        this.db.accounts.insert({account}, (err, newAccount) => {
+            this.log.debug('db addAccount done' + JSON.stringify(newAccount));            
+        });
         
         // タブグループを作成
-        var tg = new TabGroupSetting();
+        var tg = new IpcData.TabGroupSetting();
         tg.name = account.screen_name;
 
-        var tl = new TabSetting();
+        var tl = new IpcData.TabSetting();
         tl.name = "Home";
         tl.account_id = account.id;
         tl.type = TwitterApi.Type.Tweet;
         
-        var mention = new TabSetting();
+        var mention = new IpcData.TabSetting();
         mention.name = "Mention";
         mention.account_id = account.id;
         mention.type = TwitterApi.Type.Mention;
 
-        var dm = new TabSetting();
+        var dm = new IpcData.TabSetting();
         dm.name = "DM";
         dm.account_id = account.id;
         dm.type = TwitterApi.Type.DirectMessage;
         
-        tg.tabs = new Array<TabSetting>();
+        tg.tabs = new Array<IpcData.TabSetting>();
         tg.tabs.push(tl);
         tg.tabs.push(mention);
         tg.tabs.push(dm);
 
-        return new Promise<TabGroupSetting>((resolve, reject) => {
+        return new Promise<IpcData.TabGroupSetting>((resolve, reject) => {
             this.db.tabGroupSettings.insert(tg, (err, newDoc) => {
                 if (!err) {
                     resolve(newDoc);                    

@@ -2,10 +2,9 @@ import Logger = require('./Logger');
 
 import IPC_EVENT = require('../../shared/Consts/IpcEvent');
 import IPC_COMMAND = require('../../shared/Consts/IpcCommand');
-import TabSetting = require('../../shared/interfaces/TabSetting');
-import TabListenParams = require('../../shared/interfaces/TabListenParams');
-import TabGetNewParams = require('../../shared/interfaces/TabGetNewParams');
+
 import TwitterApi = require('../../shared/interfaces/TwitterApi');
+import IpcData = require('../../shared/interfaces/IpcData');
 
 import * as _ from "lodash"; // 実際は lodashを scriptタグで読んでる
 
@@ -29,10 +28,10 @@ class MainTabViewModel {
 
 	tabActive: KnockoutObservable<boolean> = ko.observable(false);
 
-	constructor(public tabSetting:TabSetting, private account) {
+	constructor(public tabSetting:IpcData.TabSetting, private account) {
 		this.log.debug('init id=>' + this.id);
 		
-		var listenParams = new TabListenParams();
+		var listenParams = new IpcData.TabListenParams();
 		listenParams.tabId = this.id;
 		listenParams.tabSetting = this.tabSetting;
 		this.ipc.send(IPC_COMMAND.TAB_LISTEN, listenParams);
@@ -49,7 +48,7 @@ class MainTabViewModel {
 		var maxId = (maxIdTweet == undefined ? null: maxIdTweet.id_str);
 		
 		this.log.debug('getTimeline id=>' + this.id + " minId = " + maxId);
-		var getParams = new TabGetNewParams();
+		var getParams = new IpcData.TabGetNewParams();
 		getParams.tabId = this.id;
 		getParams.tabSetting = this.tabSetting;
 		getParams.minId = maxId;

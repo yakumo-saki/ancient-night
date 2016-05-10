@@ -5,7 +5,7 @@ import Logger = require('./Logger');
 import IPC_COMMAND = require('../../shared/Consts/IpcCommand');
 import MainTabViewModel = require('./MainTabViewModel');
 
-import TabGroupSetting = require('../../shared/interfaces/TabGroupSetting');
+import IpcData = require('../../shared/interfaces/IpcData');
 
 /**
  * メインのビューモデル.
@@ -33,7 +33,7 @@ class MainViewModel {
 	// data
 	// ___________________________
 	
-	constructor(tabGroup:TabGroupSetting) {
+	constructor(tabGroup:IpcData.TabGroupSetting) {
 		this.log.debug('init');
 		this.account(tabGroup);
 		console.log("TABS=>" + this.tabs);

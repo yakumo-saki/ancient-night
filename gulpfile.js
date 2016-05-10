@@ -32,7 +32,7 @@ var AN_SCSS_OUT_DIR = 'app/view/css/';
 var ALL_TS = '**/*.ts';
 var TSCONFIG = 'tsconfig.json';
 
-gulp.task('default', function() {
+gulp.task('default', ['build'] ,function() {
     gulp.watch(AN_TS_MAIN_IN_DIR + ALL_TS, ['build-main']);
     gulp.watch(AN_TS_MAIN_IN_DIR + TSCONFIG, ['build-main']);
 

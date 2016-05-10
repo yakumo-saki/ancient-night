@@ -5,7 +5,7 @@ var BrowserWindow:typeof electron.BrowserWindow = electron.BrowserWindow;
 var app:Electron.App= electron.app;
 var ipc:any = electron.ipcMain;
 
-import Log = require('../../shared/interfaces/Log');
+import IpcData = require('../../shared/interfaces/IpcData');
 
 import IPC_EVENT = require('../../shared/Consts/IpcEvent');
 import IPC_COMMAND = require('../../shared/Consts/IpcCommand');
@@ -23,14 +23,14 @@ class LogFromRenderer {
         });
     }
     
-    logHandler(param:Log.LogParams) {
+    logHandler(param:IpcData.LogParams) {
         var appender = log4js.getLogger('Renderer:' + param.appender);
         
-        if (param.level == Log.LogLevel.DEBUG) {
+        if (param.level == IpcData.LogLevel.DEBUG) {
             appender.debug(param.msg);
-        } else if (param.level == Log.LogLevel.INFO) {
+        } else if (param.level == IpcData.LogLevel.INFO) {
             appender.info(param.msg);
-        } else if (param.level == Log.LogLevel.WARN) {
+        } else if (param.level == IpcData.LogLevel.WARN) {
             appender.warn(param.msg);
         } else {
             appender.error(param.msg);

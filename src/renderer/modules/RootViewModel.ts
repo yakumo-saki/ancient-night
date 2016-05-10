@@ -1,6 +1,7 @@
 import CONST = require('../../shared/Global');
-import IPC_EVENT = require('../../shared/Consts/IpcEvent');
-import IPC_COMMAND = require('../../shared/Consts/IpcCommand');
+import IPC_EVENT = require('../../shared/consts/IpcEvent');
+import IPC_COMMAND = require('../../shared/consts/IpcCommand');
+import IpcData = require('../../shared/interfaces/IpcData');
 
 import Logger = require('./Logger');
 import MainViewModel = require('./MainViewModel');
@@ -36,7 +37,7 @@ class RootViewModel {
 	initialize = () => {
 		this.log.debug('init');
 		this.ipc.on(IPC_EVENT.NEED_ACCOUNT_REFRESH, () => { this.onNeedAccountRefresh() });
-		// this.ipc.on(IPC_EVENT.GET_ACCOUNTS_RESULT, (event, arg) => { this.onGetAccountResult(arg) });
+		this.ipc.on(IPC_EVENT.GET_ACCOUNTS_RESULT, (event, arg) => { this.onGetAccountResult(arg) });
 		this.ipc.on(IPC_EVENT.GET_TAB_GROUPS_RESULT, (event, arg) => { this.onGetTabGroupsResult(arg) });
 		
 		this.ipc.send(IPC_COMMAND.GET_ACCOUNTS);
@@ -48,8 +49,13 @@ class RootViewModel {
 		this.ipc.send(IPC_COMMAND.GET_ACCOUNTS);			 
 	}
 
+	/** アカウント情報を更新した際の処理 */
+	onGetAccountResult(a) {
+		
+	}
+
 	/** タブグループ情報を更新した際の処理 */
-	onGetTabGroupsResult(tabGroups) {
+	onGetTabGroupsResult(tabGroups:Array<IpcData.TabGroupSetting>) {
 		this.log.debug('onGetTabGroupsResult');
 		// this.log.debug(JSON.stringify(accounts));
 

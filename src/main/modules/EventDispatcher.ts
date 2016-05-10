@@ -8,7 +8,8 @@ import IPC_EVENT = require('../../shared/Consts/IpcEvent');
 import IPC_COMMAND = require('../../shared/Consts/IpcCommand');
 
 import TwitterApi = require('../../shared/interfaces/TwitterApi');
-import TabListenParams = require('../../shared/interfaces/TabListenParams');
+import IpcData = require('../../shared/interfaces/IpcData');
+
 import _  = require('lodash');
 
 import events = require('events');
@@ -20,7 +21,7 @@ class EventDispatcher extends events.EventEmitter {
 
     public static EV_INCOMING_EVENT = 'EV_IMCOMING_EVENT';
 
-    subscribers: Array<TabListenParams> = new Array();
+    subscribers: Array<IpcData.TabListenParams> = new Array();
 
     queue: Array<TwitterApi.TwitterEvent> = new Array();
     
@@ -29,7 +30,7 @@ class EventDispatcher extends events.EventEmitter {
     constructor(private mainWindow) {
       super();
       
-      ipc.on(IPC_COMMAND.TAB_LISTEN, (event:any, arg:TabListenParams) => {
+      ipc.on(IPC_COMMAND.TAB_LISTEN, (event:any, arg:IpcData.TabListenParams) => {
         this.subscribe(arg);
       });
     }
@@ -106,11 +107,11 @@ class EventDispatcher extends events.EventEmitter {
        this.log.debug('publish complete Queue size = ' + this.queue.length + " event sent = " + sendCount);
     }
     
-    subscribe(arg:TabListenParams) {
+    subscribe(arg:IpcData.TabListenParams) {
         this.subscribers.push(arg);
     }
     
-    unsubscribe(arg:TabListenParams) {
+    unsubscribe(arg:IpcData.TabListenParams) {
         _.remove(this.subscribers, function(param) { return param.tabId == arg.tabId });
     }
     
