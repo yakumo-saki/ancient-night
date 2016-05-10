@@ -66,10 +66,28 @@ class ANDatabase {
        
     }
 
+    /** アカウントの登録削除 */
     getAccounts(callback:any) {
         this.db.accounts.find({}, (err:any, docs:any) => {
             this.log.debug('db getAccount done count =>' + docs.length);
             callback(docs);
+        });
+    }
+    
+    /**
+     * アカウントの登録削除.
+     * TODO: アカウントに紐付いたタブも消す 
+     */
+    deleteAccount(id_str:string):Promise<void> {
+        this.log.debug('Delete account ' + id_str);
+        return new Promise<void>((resolve, reject) => {
+            this.db.accounts.delete({"id_str" : id_str } ,  {multi: false} ,(err, numRemoved) => {
+                if (!err) {
+                    resolve(numRemoved);
+                } else {
+                    reject(err);
+                }
+            });
         });
     }
 

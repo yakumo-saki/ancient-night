@@ -21,8 +21,11 @@ class MainViewModel {
 
 	// data(flag)
 	// ___________________________
+	/** Twitterアカウント情報 */
 	account: KnockoutObservable<any> = ko.observable();
+	
 	tabs: KnockoutObservableArray<MainTabViewModel> = ko.observableArray([]);
+	
 	activeTab: KnockoutObservable<MainTabViewModel> = ko.observable(null);
 
 	footerMessage: KnockoutObservable<string> = ko.observable("");
@@ -36,7 +39,7 @@ class MainViewModel {
 		console.log("TABS=>" + this.tabs);
 		// TODO 設定できるようにする
 		tabGroup.tabs.forEach((tab) => {
-			this.tabs().push(new MainTabViewModel(tab));
+			this.tabs().push(new MainTabViewModel(tab, this.account));
 		})
 		this.switchTab( this.tabs()[0] );
 		this.footerMessage('初期化した'); 

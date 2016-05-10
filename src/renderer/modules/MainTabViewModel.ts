@@ -29,7 +29,7 @@ class MainTabViewModel {
 
 	tabActive: KnockoutObservable<boolean> = ko.observable(false);
 
-	constructor(public tabSetting:TabSetting) {
+	constructor(public tabSetting:TabSetting, private account) {
 		this.log.debug('init id=>' + this.id);
 		
 		var listenParams = new TabListenParams();

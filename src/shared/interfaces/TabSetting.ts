@@ -3,7 +3,7 @@ import TwitterApi = require('./TwitterApi');
 class TabSetting {
     id:string
     name:string
-    account_id:number
+    account_id:string
     type:TwitterApi.Type
     filter: any
 };

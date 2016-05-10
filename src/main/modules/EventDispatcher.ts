@@ -94,7 +94,8 @@ class EventDispatcher extends events.EventEmitter {
          // サブスクライバごとに送信するか決める
          this.subscribers.forEach((sub) => {
             //  this.log.debug("event type=" + item.type + " subscriber type=" + sub.tabSetting.type);
-             if (item.type == sub.tabSetting.type) {
+             if (item.type == sub.tabSetting.type 
+                 && (!sub.tabSetting.account_id || item.account_id == sub.tabSetting.account_id)) {
                  let id = IPC_EVENT.GET_TAB_NEW_EVENT + sub.tabId;
                 //  this.log.debug("sending event to " + id);
                  this.mainWindow.webContents.send(IPC_EVENT.GET_TAB_NEW_EVENT + sub.tabId, item);

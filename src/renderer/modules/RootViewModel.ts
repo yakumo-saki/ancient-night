@@ -21,11 +21,14 @@ class RootViewModel {
 
 	/** ビューモデル。タブ一覧等を持つ。アカウントごとに１個. */
 	// viewModels: KnockoutObservableArray<MainViewModel> = ko.observableArray([]);
+	
 	/** アクティブなアカウントのビューモデル。タブ一覧等を持つ */
 	activeViewModel: KnockoutObservable<MainViewModel> = ko.observable(null);
 
-	/** アカウント一覧. */
+	/** タブグループ一覧. */
 	groups: KnockoutObservableArray<any> = ko.observableArray([]);
+	
+	/** アクティブなタブグループ. */
 	activeGroup: KnockoutObservable<any> = ko.observable(null);
 
 	// data

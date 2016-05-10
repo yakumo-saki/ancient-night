@@ -14,7 +14,7 @@
   },
   "scripts": {
     "compile": "gulp build",
-    "start": "electron .",
+    "start": "gulp build && electron .",
     "debug": "electron --debug .",
     "package": "npm run package_mac && npm run package_win",
     "package_mac": "electron-packager . ancient-night --platform=darwin --icon=./app/resources/icons/app.icns --arch=x64 --version=0.37.8 --overwrite --out ./build",

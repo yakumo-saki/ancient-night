@@ -1,5 +1,3 @@
-/// <reference path="../typings/bundle.d.ts" />
-
 import log4js = require('log4js');
 import electron = require('electron');
 var BrowserWindow:typeof electron.BrowserWindow = electron.BrowserWindow;
@@ -30,8 +28,8 @@ class AncientNight {
 
   private BASE_DIR = __dirname + '/../../view/'; // このモジュールから Viewへのパス
 
-  private mainWindow:any = null;
-  private prefWindow:any = null;
+  private mainWindow:Electron.BrowserWindow = null;
+  private prefWindow:Electron.BrowserWindow = null;
   
   private accounts:{ [key:number]: any} = {};
 
@@ -295,9 +293,7 @@ class AncientNight {
               label: 'Toggle Developer Tools',
               accelerator: 'Alt+Command+I',
               click: () => {
-                  this.log.debug("this => " + this.toString());
-                  this.log.debug("this.mainWindow => " + this.mainWindow.toString()); 
-                  this.mainWindow.toggleDevTools() 
+                  this.mainWindow.webContents.toggleDevTools() 
               }
             },
           ]
@@ -327,7 +323,7 @@ class AncientNight {
             {
               label: '&Reload',
               accelerator: 'Ctrl+R',
-              click: () => { this.mainWindow.restart(); }
+              click: () => { this.mainWindow.reload(); }
             },
             {
               label: 'Toggle &Full Screen',
@@ -337,7 +333,7 @@ class AncientNight {
             {
               label: 'Toggle &Developer Tools',
               accelerator: 'Alt+Ctrl+I',
-              click: () => { this.mainWindow.toggleDevTools(); }
+              click: () => { this.mainWindow.webContents.toggleDevTools(); }
             },
           ]
         }
@@ -364,7 +360,11 @@ class AncientNight {
           this.log.debug(error);
         }
         var url = twitter.getAuthUrl(requestToken);
-        var loginWindow = new BrowserWindow({width: 800, height: 600});
+        var loginWindow:Electron.BrowserWindow = new BrowserWindow({width: 800, height: 600, 'node-integration': false });
+  
+        loginWindow.webContents.session.clearStorageData({ storages: ["cookies"] }, () => {});
+ 
+        // URL遷移のイベントで認証完了タイミングを取得
         loginWindow.webContents.on('will-navigate', (event:any, url:string) => {
           // https://www.google.co.jp/?oauth_token=...&oauth_verifier=...のようなURLが渡ってくる.
           
@@ -389,7 +389,7 @@ class AncientNight {
             });
 
             event.preventDefault();
-            setTimeout( () => { loginWindow.close(); }, 0);
+            setTimeout( () => { loginWindow.close(); loginWindow.destroy(); loginWindow == null }, 0);
 
           } else {
             this.log.debug('Account add failure ' + url);

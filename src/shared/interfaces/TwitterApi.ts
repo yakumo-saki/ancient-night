@@ -75,6 +75,7 @@ export class TwitterEvent {
     
     type: Type;
     id_str: string;
+    account_id: string;
     
     data: TweetBase;    
 }
