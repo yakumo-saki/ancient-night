@@ -39,13 +39,14 @@ class TwitterClient extends events.EventEmitter {
 
 	// tweet text behaviors
 	// ___________________________
-	tweet(msg:string):void {
-		alert('tweet ' + msg);
+	sendNewTweet(msg:string):void {
 		this.Twitter.post('statuses/update', {status: msg} , (error:any, tweet:any, response:any) => {
 		  if(error) throw new Error(JSON.stringify(error));
 
 		  this.log.debug(tweet);
 		});
+        
+        // TODO 結果をEmitする
 	}
     
     getTimeline(count:number, minId:string):void {
@@ -77,7 +78,7 @@ class TwitterClient extends events.EventEmitter {
     dispose() {
         super.removeAllListeners();
         
-        // stream切る
+        // TODO stream切る
     }
     
 }

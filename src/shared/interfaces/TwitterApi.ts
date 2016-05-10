@@ -34,6 +34,10 @@ export interface UserInfo extends UserShortInfo {
     lang: string
     profile_image_url_https: string
     following: boolean
+    
+    _id: string  // 内部独自項目
+    accessToken: string  // 内部独自項目
+    accessSecret: string // 内部独自項目
 }
 
 export interface Tweet extends TweetBase {
@@ -92,4 +96,8 @@ export enum StreamEventType {
     statusWithheld,
     userWithheld,
     disconnect
+}
+
+export interface VerifyCredentialsResult {
+    account: UserInfo;
 }

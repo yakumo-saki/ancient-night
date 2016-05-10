@@ -25,6 +25,11 @@ export class TabSetting {
     filter: any
 };
 
+export class NewTweetParams {
+    text: string
+    account_id: string
+}
+
 export class LogParams {
     level: LogLevel
     msg: string
@@ -34,3 +39,5 @@ export class LogParams {
 export enum LogLevel {
     DEBUG, INFO, WARN, ERROR
 }
+
+export interface UserInfo extends TwitterApi.UserInfo {}

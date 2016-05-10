@@ -105,6 +105,9 @@ class AncientNight {
     ipc.on(IPC_COMMAND.TAB_GET_INITIAL, (event:any, arg:IpcData.TabGetNewParams) => {
         this.getInitialTimeline();
     });
+		ipc.on(IPC_COMMAND.NEW_TWEET, (event:any, arg:IpcData.NewTweetParams) => {
+        this.sendNewTweet(arg);
+    });
 
   }
 
@@ -113,7 +116,7 @@ class AncientNight {
    * TwitterClientはアカウント情報に依存するので作り直し
    */
   refreshAccount(sendToRenderer:boolean) {
-    this.DB.getAccounts((docs:Array<any>) => {
+    this.DB.getAccounts((docs:Array<TwitterApi.UserInfo>) => {
       this.log.debug('refreshAccount: Account count => ' + docs.length);
       
       // EventEmitterを停止させる
@@ -124,10 +127,10 @@ class AncientNight {
       // 内部のアカウント情報を更新
       this.accounts = new Object();
       docs.forEach( (doc) => {
-        let account = doc.account;
-        this.accounts[account.id] = account;
-        this.twitterClients[account.id] = new TwitterClient(account.accessToken, account.accessSecret);
-        this.log.debug("append " + account.id);       
+        let account = doc;
+        this.accounts[account.id_str] = account;
+        this.twitterClients[account.id_str] = new TwitterClient(account.accessToken, account.accessSecret);
+        this.log.debug("append " + account.id_str);       
       })
 
       // イベントハンドラ仕掛ける
@@ -191,6 +194,17 @@ class AncientNight {
     }).catch((err) => {
       this.log.error(err);
     });
+  }
+  
+  sendNewTweet(tweet:IpcData.NewTweetParams) {
+    this.log.debug(JSON.stringify(tweet));
+    var client:TwitterClient = this.twitterClients[tweet.account_id];
+    if (!client) { throw new Error("Invalid Account")}
+    
+    client.sendNewTweet(tweet.text);
+    
+    // TODO エラー処理
+    
   }
   
   /** 
@@ -372,10 +386,10 @@ class AncientNight {
               this.log.debug('accessToken', accessToken);
               this.log.debug('accessTokenSecret', accessTokenSecret);
               
-              twitter.verifyCredentials(accessToken, accessTokenSecret, {skip_status: true}, (error:any, data:any, response:any) => {
+              twitter.verifyCredentials(accessToken, accessTokenSecret, {skip_status: true}, (error:any, data:TwitterApi.UserInfo, response:any) => {
                 // verified.
                 this.log.debug("screenName:" + data.screen_name);
-                data._id = data.id;
+                data._id = data.id_str;
                 data.accessToken = accessToken;
                 data.accessSecret = accessTokenSecret;
                 this.DB.addAccount(data);

@@ -10,7 +10,7 @@ import IpcData = require('../../shared/interfaces/IpcData');
 /**
  * メインのビューモデル.
  * タブの中身になるビューモデルを保持する。
- * このビューモデル＝アカウントではない（場合もある）
+ * このビューモデル＝タブグループである。
  */
 class MainViewModel {
 
@@ -36,7 +36,7 @@ class MainViewModel {
 	constructor(tabGroup:IpcData.TabGroupSetting) {
 		this.log.debug('init');
 		this.account(tabGroup);
-		console.log("TABS=>" + this.tabs);
+
 		// TODO 設定できるようにする
 		tabGroup.tabs.forEach((tab) => {
 			this.tabs().push(new MainTabViewModel(tab, this.account));
@@ -58,7 +58,6 @@ class MainViewModel {
 
 	switchTab = (target: MainTabViewModel) => {
 			
-		console.log('deactive');
 		this.tabs().forEach((tab) => {
 			tab.tabActive(tab.id == target.id);
 			if (tab.tabActive()) {

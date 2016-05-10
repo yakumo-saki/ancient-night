@@ -24,9 +24,9 @@ class ANDatabase {
         this.log.debug('db load done..');
     }
 
-    addAccount(account:any):Promise<IpcData.TabGroupSetting> {
+    addAccount(account:TwitterApi.UserInfo):Promise<IpcData.TabGroupSetting> {
         this.log.debug(JSON.stringify(account));
-        this.db.accounts.insert({account}, (err, newAccount) => {
+        this.db.accounts.insert(account, (err, newAccount) => {
             this.log.debug('db addAccount done' + JSON.stringify(newAccount));            
         });
         
@@ -36,17 +36,17 @@ class ANDatabase {
 
         var tl = new IpcData.TabSetting();
         tl.name = "Home";
-        tl.account_id = account.id;
+        tl.account_id = account.id_str;
         tl.type = TwitterApi.Type.Tweet;
         
         var mention = new IpcData.TabSetting();
         mention.name = "Mention";
-        mention.account_id = account.id;
+        mention.account_id = account.id_str;
         mention.type = TwitterApi.Type.Mention;
 
         var dm = new IpcData.TabSetting();
         dm.name = "DM";
-        dm.account_id = account.id;
+        dm.account_id = account.id_str;
         dm.type = TwitterApi.Type.DirectMessage;
         
         tg.tabs = new Array<IpcData.TabSetting>();
@@ -68,7 +68,7 @@ class ANDatabase {
 
     /** アカウントの登録削除 */
     getAccounts(callback:any) {
-        this.db.accounts.find({}, (err:any, docs:any) => {
+        this.db.accounts.find({}, (err:any, docs:Array<TwitterApi.UserInfo>) => {
             this.log.debug('db getAccount done count =>' + docs.length);
             callback(docs);
         });

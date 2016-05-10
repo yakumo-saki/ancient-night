@@ -8,6 +8,7 @@ import MainViewModel = require('./MainViewModel');
 
 /**
  * 最上位ビューモデル.
+ * Twitterアカウントと、タブグループを束ねている。
  */
 class RootViewModel {
 
@@ -26,11 +27,19 @@ class RootViewModel {
 	/** アクティブなアカウントのビューモデル。タブ一覧等を持つ */
 	activeViewModel: KnockoutObservable<MainViewModel> = ko.observable(null);
 
+	/** アカウント一覧. */
+	accounts: KnockoutObservableArray<IpcData.UserInfo> = ko.observableArray([]);
+	
+	/** アクティブなアカウント. */
+	activeAccount: KnockoutObservable<IpcData.UserInfo> = ko.observable(null);
+
 	/** タブグループ一覧. */
-	groups: KnockoutObservableArray<any> = ko.observableArray([]);
+	groups: KnockoutObservableArray<IpcData.TabGroupSetting> = ko.observableArray([]);
 	
 	/** アクティブなタブグループ. */
-	activeGroup: KnockoutObservable<any> = ko.observable(null);
+	activeGroup: KnockoutObservable<IpcData.TabGroupSetting> = ko.observable(null);
+
+	newTweet: KnockoutObservable<string> = ko.observable(null);
 
 	// data
 	// ___________________________
@@ -46,12 +55,22 @@ class RootViewModel {
 	}
 
 	onNeedAccountRefresh() {
-		this.ipc.send(IPC_COMMAND.GET_ACCOUNTS);			 
+		this.ipc.send(IPC_COMMAND.GET_ACCOUNTS);
+		this.ipc.send(IPC_COMMAND.GET_TAB_GROUPS);
 	}
 
 	/** アカウント情報を更新した際の処理 */
-	onGetAccountResult(a) {
+	onGetAccountResult(accounts:Array<IpcData.UserInfo>) {
+		this.accounts.removeAll();
+		Array.prototype.push.apply(this.accounts(), accounts);
 		
+		// if (this.accounts().length > 0) {
+		// 	this.activeAccount(this.accounts()[0]);
+		// } else {
+		// 	this.log.warn('no account has been set up');
+		// }
+		
+		// TODO 以前選択していたものがあればそちらを選択
 	}
 
 	/** タブグループ情報を更新した際の処理 */
@@ -71,10 +90,12 @@ class RootViewModel {
 		}
 		
 		// this.accounts(accounts);
-		// TODO データを破棄してしまうので、キャッシュから再度イベントを流して貰う
 		this.initializing(true);
-		this.activeViewModel().setInitializing(true);
+		if (this.activeViewModel()) {
+			this.activeViewModel().setInitializing(true);
+		}
 
+		// データを破棄してしまうので、キャッシュから再度イベントを流して貰う
 		// 完了したら初期化中フラグを戻す
 		this.ipc.once(IPC_EVENT.GET_INITIAL_COMPLETE, () => {
 			this.initializing(false);
@@ -100,8 +121,15 @@ class RootViewModel {
 		this.activeViewModel().refreshTimeline();
 	}
 
-	getTimeline() {
-		this.log.debug('getTimeline');
+	sendTweet = () => {
+		this.log.debug('sendTweet');
+		if (!this.activeAccount()) { throw new Error("no account selected") }
+		
+		var params = new IpcData.NewTweetParams();
+		params.account_id = this.activeAccount().id_str;
+		params.text = this.newTweet();
+		
+		this.ipc.send(IPC_COMMAND.NEW_TWEET, params);
 	}
 
 }
