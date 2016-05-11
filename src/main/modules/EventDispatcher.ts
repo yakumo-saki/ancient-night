@@ -38,7 +38,7 @@ class EventDispatcher extends events.EventEmitter {
     /** 
      * イベントをキューに追加します.
      */
-    public pushEvent(events:Array<any>, typeHint:TwitterApi.Type) {
+    public pushEventFromRestApi(events:Array<TwitterApi.Tweet>, typeHint:TwitterApi.Type) {
         this.log.debug('new Event size = ' + events.length);
         
         let T = TwitterApi.Type
@@ -55,6 +55,7 @@ class EventDispatcher extends events.EventEmitter {
             if (twEvent) {
                 twEvent.type = typeHint;
                 twEvent.id_str = ev.id_str;
+                twEvent.account_id = ev.account_id;
                 twEvent.data = ev;
                 eventList.push(twEvent) 
             }
@@ -94,7 +95,8 @@ class EventDispatcher extends events.EventEmitter {
        que.forEach( (item) => {
          // サブスクライバごとに送信するか決める
          this.subscribers.forEach((sub) => {
-            //  this.log.debug("event type=" + item.type + " subscriber type=" + sub.tabSetting.type);
+             //  this.log.debug("event type=" + item.type + " subscriber type=" + sub.tabSetting.type);
+             // this.log.debug("event account=" + item.account_id + " subscriber account=" + sub.tabSetting.account_id);
              if (item.type == sub.tabSetting.type 
                  && (!sub.tabSetting.account_id || item.account_id == sub.tabSetting.account_id)) {
                  let id = IPC_EVENT.GET_TAB_NEW_EVENT + sub.tabId;

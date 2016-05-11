@@ -22,7 +22,7 @@ class TwitterClient extends events.EventEmitter {
 
     private Twitter:any = null;
 
-    constructor (access_key:string, access_secret:string) {
+    constructor (private account_id: string,access_key:string, access_secret:string) {
        super();
        
        if (access_key == null)    throw "ERROR: accessKey is null";
@@ -43,7 +43,7 @@ class TwitterClient extends events.EventEmitter {
 		this.Twitter.post('statuses/update', {status: msg} , (error:any, tweet:any, response:any) => {
 		  if(error) throw new Error(JSON.stringify(error));
 
-		  this.log.debug(tweet);
+		  // this.log.debug(tweet);
 		});
         
         // TODO 結果をEmitする
@@ -71,6 +71,10 @@ class TwitterClient extends events.EventEmitter {
           
         //   console.log('result' + type.toString() + " " );
         //   console.log(JSON.stringify(tweets));
+          tweets.forEach( (tw) => {
+            tw.account_id = this.account_id;
+          })
+        
           this.emit('result' + type.toString(), tweets);
   	    });
 	}

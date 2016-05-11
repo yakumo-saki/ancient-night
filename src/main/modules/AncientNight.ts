@@ -50,16 +50,18 @@ class AncientNight {
       }
     });
     
+    app.on('activate', function () {
+      if (this.mainWindow === null) {
+        this.createMainWindow();
+      }
+    })
+    
     app.on('ready', this.onReady);
     
   }
 
-  /**
-   * app.ready のハンドラ.
-   */
-  onReady = () => {
-    this.installMenu(); // this.installMenuと呼ぶとエラーになる
-
+  createMainWindow = () => {
+    
     this.mainWindow = new BrowserWindow({
         width: 550
         , height: 600
@@ -70,6 +72,15 @@ class AncientNight {
     });
     var uri = 'file://' + this.BASE_DIR + 'main.html';
     this.mainWindow.loadURL(uri);
+  }
+
+  /**
+   * app.ready のハンドラ.
+   */
+  onReady = () => {
+    this.installMenu(); // this.installMenuと呼ぶとエラーになる
+
+    this.createMainWindow()
     // this.log.debug('main window loaded ' + uri);
 
     this.prefWindow = new BrowserWindow({
@@ -129,7 +140,8 @@ class AncientNight {
       docs.forEach( (doc) => {
         let account = doc;
         this.accounts[account.id_str] = account;
-        this.twitterClients[account.id_str] = new TwitterClient(account.accessToken, account.accessSecret);
+        this.twitterClients[account.id_str] = 
+                      new TwitterClient(account.id_str,account.accessToken, account.accessSecret);
         this.log.debug("append " + account.id_str);       
       })
 
@@ -137,20 +149,20 @@ class AncientNight {
       _.values<TwitterClient>(this.twitterClients).forEach((client) => {        
         client.on('result' + TwitterApi.Type.Tweet.toString(), (tweets:Array<any>) => {
           this.log.debug("Tweets " + tweets.length);
-          this.eventDispatcher.pushEvent(tweets, TwitterApi.Type.Tweet);
+          this.eventDispatcher.pushEventFromRestApi(tweets, TwitterApi.Type.Tweet);
           this.eventDispatcher.publish();
         });
         client.on('result' + TwitterApi.Type.Mention.toString(), (tweets:Array<any>) => {
           this.log.debug("Mentions " + tweets.length);
-          this.eventDispatcher.pushEvent(tweets, TwitterApi.Type.Mention);
+          this.eventDispatcher.pushEventFromRestApi(tweets, TwitterApi.Type.Mention);
           this.eventDispatcher.publish();
         });
         client.on('result' + TwitterApi.Type.DirectMessage.toString(), (tweets:Array<any>) => {
           this.log.debug("DirectMessage " + tweets.length);
-          this.eventDispatcher.pushEvent(tweets, TwitterApi.Type.DirectMessage);
+          this.eventDispatcher.pushEventFromRestApi(tweets, TwitterApi.Type.DirectMessage);
           this.eventDispatcher.publish();
         });
-      })      
+      })
 
       if (sendToRenderer) {
         this.mainWindow.webContents.send(IPC_EVENT.GET_ACCOUNTS_RESULT, docs);
@@ -212,7 +224,7 @@ class AncientNight {
    **/
   installMenu = () => {
     
-    var Menu = require('menu');
+    var Menu = electron.Menu;
     if(process.platform == 'darwin') {
       var menu = Menu.buildFromTemplate([
         {
@@ -236,12 +248,12 @@ class AncientNight {
             {
               label: 'Undo',
               accelerator: 'Command+Z',
-              selector: 'undo:'
+              role: 'undo'
             },
             {
               label: 'Redo',
               accelerator: 'Shift+Command+Z',
-              selector: 'redo:'
+              role: 'redo'
             },
             {
               type: 'separator'
@@ -249,22 +261,22 @@ class AncientNight {
             {
               label: 'Cut',
               accelerator: 'Command+X',
-              selector: 'cut:'
+              role: 'cut'
             },
             {
               label: 'Copy',
               accelerator: 'Command+C',
-              selector: 'copy:'
+              role: 'copy'
             },
             {
               label: 'Paste',
               accelerator: 'Command+V',
-              selector: 'paste:'
+              role: 'paste'
             },
             {
               label: 'Select All',
               accelerator: 'Command+A',
-              selector: 'selectAll:'
+              role: 'selectall'
             },
           ]
         },

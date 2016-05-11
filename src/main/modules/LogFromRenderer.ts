@@ -2,7 +2,7 @@
 import log4js = require('log4js');
 import electron = require('electron');
 var BrowserWindow:typeof electron.BrowserWindow = electron.BrowserWindow;
-var app:Electron.App= electron.app;
+var app:Electron.App = require('electron').app;
 var ipc:any = electron.ipcMain;
 
 import IpcData = require('../../shared/interfaces/IpcData');
@@ -16,8 +16,9 @@ import IPC_COMMAND = require('../../shared/consts/IpcCommand');
 class LogFromRenderer {
     
     constructor() {
+        console.log(app);
         app.on('ready', () => {
-            ipc.on(IPC_COMMAND.LOG, (event:any, arg:any) => {
+            ipc.on(IPC_COMMAND.LOG, (event:any, arg:IpcData.LogParams) => {
                 this.logHandler(arg);
             });
         });

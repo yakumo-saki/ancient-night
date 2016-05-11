@@ -18,14 +18,16 @@
     "debug": "electron --debug .",
     "package": "npm run package_mac && npm run package_win",
     "package_circleci": "npm run package_mac && npm run package_win_noicon",
-    "package_mac": "electron-packager . ancient-night --platform=darwin --icon=./app/resources/icons/app.icns --arch=x64 --version=0.37.8 --overwrite --out ./build",
-    "package_win": "electron-packager . ancient-night --platform=win32 --icon=./app/resources/icons/app.ico --arch=x64 --version=0.37.8 --overwrite --out ./build",
-    "package_win_noicon": "electron-packager . ancient-night --platform=win32 --arch=x64 --version=0.37.8 --overwrite --out ./build",
+    "package_mac": "electron-packager . ancient-night --platform=darwin --icon=./app/resources/icons/app.icns --arch=x64 --version=1.0.1 --overwrite --out ./build",
+    "package_win": "electron-packager . ancient-night --platform=win32 --icon=./app/resources/icons/app.ico --arch=x64 --version=1.0.1 --overwrite --out ./build",
+    "package_win_noicon": "electron-packager . ancient-night --platform=win32 --arch=x64 --version=1.0.1 --overwrite --out ./build",
     "watch": "gulp watch"
   },
   "devDependencies": {
     "del": "^2.2.0",
+    "devtron": "^1.0.1",
     "electron-packager": "^7.0.0",
+    "electron-prebuilt": "^1.0.1",
     "gulp": "^3.9.0",
     "gulp-shell": "^0.5.2",
     "run-sequence": "^1.1.5",
@@ -33,7 +35,7 @@
   },
   "dependencies": {
     "jquery": "^2.2.3",
-    "lodash": "^4.11.2",
+    "lodash": "^4.12.0",
     "log4js": "^0.6.36",
     "moment": "^2.10.6",
     "nedb": "^1.8.0",

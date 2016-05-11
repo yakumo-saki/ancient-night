@@ -35,14 +35,22 @@ export interface UserInfo extends UserShortInfo {
     profile_image_url_https: string
     following: boolean
     
-    _id: string  // 内部独自項目
-    accessToken: string  // 内部独自項目
-    accessSecret: string // 内部独自項目
+    /** 内部独自項目 */
+    _id: string           
+    /** 内部独自項目 */
+    account_id: string;
+    /** 内部独自項目 */
+    accessToken: string
+    /** 内部独自項目 */
+    accessSecret: string
 }
 
 export interface Tweet extends TweetBase {
     /** 送信元ユーザー */
     user: UserInfo;
+    
+    /** 内部独自項目. 受信したアカウントID。public apiの場合、nullの可能性がある */
+    account_id: string;
 }
 
 export interface Mention extends TweetBase {
@@ -77,8 +85,13 @@ export enum Type {
  */
 export class TwitterEvent {
     
+    /** ツイート種別. */
     type: Type;
+
+    /** TwitterのID. */
     id_str: string;
+    
+    /** アカウントID. */
     account_id: string;
     
     data: TweetBase;    
