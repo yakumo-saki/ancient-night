@@ -10,18 +10,24 @@ dependencies:
     - sudo apt-get install jq
 
 deployment:
-  master:
+  production:
     branch: master
     commands:
-      - cd ~/$CIRCLE_PROJECT_REPONAME && npm run package_circleci
-      - zip -r `echo ${CIRCLE_ARTIFACTS}/${CIRCLE_PROJECT_REPONAME}_osx.zip` ~/$CIRCLE_PROJECT_REPONAME/build/ancient-night-darwin-x64/
-      - zip -r `echo ${CIRCLE_ARTIFACTS}/${CIRCLE_PROJECT_REPONAME}_win.zip` ~/$CIRCLE_PROJECT_REPONAME/build/ancient-night-win32-x64/
+      - ./script/release_github.sh `echo ${CIRCLE_PROJECT_REPONAME}_osx.zip`
+      - ./script/release_github.sh `echo ${CIRCLE_PROJECT_REPONAME}_win.zip`
+  nightly:
+    branch: develop
+    commands:
       - ./script/release_github.sh `echo ${CIRCLE_PROJECT_REPONAME}_osx.zip`
       - ./script/release_github.sh `echo ${CIRCLE_PROJECT_REPONAME}_win.zip`
      
 test:
   pre:
-      - cd ~/$CIRCLE_PROJECT_REPONAME/src/main && tsconfig -u && tsc
-      - cd ~/$CIRCLE_PROJECT_REPONAME/src/renderer && tsconfig -u && tsc
+    - cd ~/$CIRCLE_PROJECT_REPONAME/src/main && tsconfig -u && tsc
+    - cd ~/$CIRCLE_PROJECT_REPONAME/src/renderer && tsconfig -u && tsc
   override:
     - echo No test, never mind.
+  post:
+    - cd ~/$CIRCLE_PROJECT_REPONAME && npm run package_circleci
+    - zip -r `echo ${CIRCLE_ARTIFACTS}/${CIRCLE_PROJECT_REPONAME}_osx.zip` ~/$CIRCLE_PROJECT_REPONAME/build/ancient-night-darwin-x64/
+    - zip -r `echo ${CIRCLE_ARTIFACTS}/${CIRCLE_PROJECT_REPONAME}_win.zip` ~/$CIRCLE_PROJECT_REPONAME/build/ancient-night-win32-x64/
