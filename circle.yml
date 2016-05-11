@@ -2,22 +2,19 @@ machine:
   timezone: Asia/Tokyo
   node:
     version: 6.0.0
-  post:
-    - npm install -g typescript
-    - npm install -g tsconfig-cli
-    - npm install -g electron-packager
 
 dependencies:
   override:
+    - npm install -g typescript
+    - npm install -g tsconfig-cli
+    - npm install -g electron-packager
     - npm install
 
 deployment:
   master:
     branch: master
     commands:
-      - cd ~/$CIRCLE_PROJECT_REPONAME/src/main && tsconfig -u && tsc
-      - cd ~/$CIRCLE_PROJECT_REPONAME/src/renderer && tsconfig -u && tsc
-      - cd ~/$CIRCLE_PROJECT_REPONAME/ && npm run package_circleci
+      - ~/$CIRCLE_PROJECT_REPONAME/script/build_circleci.sh
      
 test:
   override:
