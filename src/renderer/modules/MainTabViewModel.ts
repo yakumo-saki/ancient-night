@@ -38,6 +38,23 @@ class MainTabViewModel {
 
 		this.ipc.on(IPC_EVENT.GET_TAB_NEW_EVENT + this.id, (event, arg) => { this.newEvent(arg); });
 
+		if (tabSetting.type == TwitterApi.Type.Tweet) {
+			setTimeout(()=>{ 
+				this.log.debug('auto refresh(tweet) exec');
+			    this.getTimeline() 
+			}, 30000); // 60 / 15min limit 180
+		} else if (tabSetting.type == TwitterApi.Type.Mention) {
+			setTimeout(()=>{ 
+				this.log.debug('auto refresh(Mention) exec');
+				this.getTimeline() 
+			}, 60000); // 60 / 15min limit 180
+		} else if (tabSetting.type == TwitterApi.Type.Mention) {
+			setTimeout(()=>{
+				this.log.debug('auto refresh(Mention) exec');
+				this.getTimeline() 
+			}, 300000); // 60 / 15min limit 180		
+		}
+
 	}
 	
 	// data
