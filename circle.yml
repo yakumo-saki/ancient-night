@@ -13,8 +13,10 @@ deployment:
     branch: master
     commands:
       - cd ~/$CIRCLE_PROJECT_REPONAME && npm run package_circleci
-      - zip -r `echo {$CIRCLE_ARTIFACTS}/{$CIRCLE_PROJECT_REPONAME}_osx.zip` ../build/ancient-night-darwin-x64/
-      - zip -r `echo {$CIRCLE_ARTIFACTS}/{$CIRCLE_PROJECT_REPONAME}_win.zip` ../build/ancient-night-win32-x64/
+      - zip -r `echo ${CIRCLE_ARTIFACTS}/${CIRCLE_PROJECT_REPONAME}_osx.zip` ~/$CIRCLE_PROJECT_REPONAME/build/ancient-night-darwin-x64/
+      - zip -r `echo ${CIRCLE_ARTIFACTS}/${CIRCLE_PROJECT_REPONAME}_win.zip` ~/$CIRCLE_PROJECT_REPONAME/build/ancient-night-win32-x64/
+      - ./script/release_github.sh `echo ${CIRCLE_PROJECT_REPONAME}_osx.zip`
+      - ./script/release_github.sh `echo ${CIRCLE_PROJECT_REPONAME}_win.zip`
      
 test:
   pre:
