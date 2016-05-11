@@ -72,7 +72,7 @@
               </button>
             </div>
             タブ
-            <select class="" data-bind="value: activeGroup, options: groups, optionsText: 'name'">
+            <select class="" data-bind="value: activeGroup, options: groups, optionsText: 'name', event: { change: onGroupSelected }">
                <option>Tab Group1</option>
             </select>
             <button class="btn btn-large btn-default btn-dropdown pull-right">
