@@ -173,9 +173,6 @@
         window.$ = require('jquery');
 
         require('devtron').install()
-        if (Global.debug) {
-          currentWindow.openDevTools();
-        }
         
         window.rootViewModel = new RootViewModel();
         window.rootViewModel.initialize();
