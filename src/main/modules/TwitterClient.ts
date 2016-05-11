@@ -6,8 +6,8 @@ var Tw = require('twitter');
 
 import Global = require('../../shared/Global');
 import GlobalSecret = require('../../shared/GlobalSecret');
-import IPC_EVENT = require('../../shared/Consts/IpcEvent');
-import IPC_COMMAND = require('../../shared/Consts/IpcCommand');
+import IPC_EVENT = require('../../shared/consts/IpcEvent');
+import IPC_COMMAND = require('../../shared/consts/IpcCommand');
 
 import TwitterApi = require('../../shared/interfaces/TwitterApi');
 

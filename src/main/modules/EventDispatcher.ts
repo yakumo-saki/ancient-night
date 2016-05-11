@@ -4,8 +4,8 @@ var BrowserWindow:typeof electron.BrowserWindow = electron.BrowserWindow;
 var app:Electron.App= electron.app;
 var ipc:any = electron.ipcMain;
 
-import IPC_EVENT = require('../../shared/Consts/IpcEvent');
-import IPC_COMMAND = require('../../shared/Consts/IpcCommand');
+import IPC_EVENT = require('../../shared/consts/IpcEvent');
+import IPC_COMMAND = require('../../shared/consts/IpcCommand');
 
 import TwitterApi = require('../../shared/interfaces/TwitterApi');
 import IpcData = require('../../shared/interfaces/IpcData');

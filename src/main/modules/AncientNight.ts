@@ -5,8 +5,8 @@ var app:Electron.App= electron.app;
 var ipc:any = electron.ipcMain;
 
 import CONST = require('../../shared/Global');
-import IPC_EVENT = require('../../shared/Consts/IpcEvent');
-import IPC_COMMAND = require('../../shared/Consts/IpcCommand');
+import IPC_EVENT = require('../../shared/consts/IpcEvent');
+import IPC_COMMAND = require('../../shared/consts/IpcCommand');
 import GlobalSecret = require('../../shared/GlobalSecret');
 
 import IpcData = require('../../shared/interfaces/IpcData');

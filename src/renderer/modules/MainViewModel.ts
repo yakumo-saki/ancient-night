@@ -2,7 +2,7 @@
 var Twitter = require('twitter');
 
 import Logger = require('./Logger');
-import IPC_COMMAND = require('../../shared/Consts/IpcCommand');
+import IPC_COMMAND = require('../../shared/consts/IpcCommand');
 import MainTabViewModel = require('./MainTabViewModel');
 
 import IpcData = require('../../shared/interfaces/IpcData');

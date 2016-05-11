@@ -7,8 +7,8 @@ var ipc:any = electron.ipcMain;
 
 import IpcData = require('../../shared/interfaces/IpcData');
 
-import IPC_EVENT = require('../../shared/Consts/IpcEvent');
-import IPC_COMMAND = require('../../shared/Consts/IpcCommand');
+import IPC_EVENT = require('../../shared/consts/IpcEvent');
+import IPC_COMMAND = require('../../shared/consts/IpcCommand');
 
 /**
  * レンダラプロセスからのログをLoggerに出力します.

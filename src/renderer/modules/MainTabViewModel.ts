@@ -1,7 +1,7 @@
 import Logger = require('./Logger');
 
-import IPC_EVENT = require('../../shared/Consts/IpcEvent');
-import IPC_COMMAND = require('../../shared/Consts/IpcCommand');
+import IPC_EVENT = require('../../shared/consts/IpcEvent');
+import IPC_COMMAND = require('../../shared/consts/IpcCommand');
 
 import TwitterApi = require('../../shared/interfaces/TwitterApi');
 import IpcData = require('../../shared/interfaces/IpcData');
