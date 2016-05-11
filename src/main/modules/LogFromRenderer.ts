@@ -16,7 +16,6 @@ import IPC_COMMAND = require('../../shared/consts/IpcCommand');
 class LogFromRenderer {
     
     constructor() {
-        console.log(app);
         app.on('ready', () => {
             ipc.on(IPC_COMMAND.LOG, (event:any, arg:IpcData.LogParams) => {
                 this.logHandler(arg);
