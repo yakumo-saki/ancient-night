@@ -1,5 +1,3 @@
-/// <reference path="./typings/bundle.d.ts" />
-
 console.log('starting AncientNight');
 
 var LogFromRenderer = require('./modules/LogFromRenderer');

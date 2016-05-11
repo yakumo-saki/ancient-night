@@ -27,6 +27,9 @@ class RootViewModel {
 	/** アクティブなアカウントのビューモデル。タブ一覧等を持つ */
 	activeViewModel: KnockoutObservable<MainViewModel> = ko.observable(null);
 
+	/** タブグループごとのビューモデル */
+	viewModels: KnockoutObservableArray<MainViewModel> = ko.observableArray([]);
+	
 	/** アカウント一覧. */
 	accounts: KnockoutObservableArray<IpcData.UserInfo> = ko.observableArray([]);
 	
@@ -40,6 +43,7 @@ class RootViewModel {
 	activeGroup: KnockoutObservable<IpcData.TabGroupSetting> = ko.observable(null);
 
 	newTweet: KnockoutObservable<string> = ko.observable(null);
+	
 
 	// data
 	// ___________________________
@@ -78,8 +82,21 @@ class RootViewModel {
 		this.log.debug('onGetTabGroupsResult');
 		// this.log.debug(JSON.stringify(accounts));
 
+		// ビューモデルを破棄する
+		this.viewModels().forEach((vm) => {
+			vm.beforeDestroy();
+		});
+		this.viewModels.removeAll();
+
 		this.groups.removeAll();
-		tabGroups.forEach((grp) => { this.groups.push(grp)} );
+		
+		// タブグループリストの生成と、MainViewModelインスタンス化
+		tabGroups.forEach((grp) => {
+			this.groups.push(grp);
+			
+			var mainViewModel = new MainViewModel(grp);
+			this.viewModels.push(mainViewModel);
+		});
 		
 		this.log.debug(this.groups().length + ' / ' + tabGroups.length);
 		
@@ -88,32 +105,30 @@ class RootViewModel {
 			this.activeGroup(this.groups()[0]);
 			this.onGroupSelected();
 		}
-		
-		// this.accounts(accounts);
+
 		this.initializing(true);
-		if (this.activeViewModel()) {
-			this.activeViewModel().setInitializing(true);
-		}
+		this.viewModels().forEach( (vm) => {
+			vm.setInitializing(true);
+		});
 
 		// データを破棄してしまうので、キャッシュから再度イベントを流して貰う
 		// 完了したら初期化中フラグを戻す
 		this.ipc.once(IPC_EVENT.GET_INITIAL_COMPLETE, () => {
 			this.initializing(false);
-			this.activeViewModel().setInitializing(false);			
+			this.viewModels().forEach( (vm) => {
+				vm.setInitializing(false);
+			});
 		});
 		this.ipc.send(IPC_COMMAND.TAB_GET_INITIAL);
 	}
 
 	/** タブグループ情報を更新した際の処理 */
-	onGroupSelected() {
+	onGroupSelected = () => {
 		this.log.debug('onGroupSelected');
 		
-		if (this.activeViewModel() != null) {
-			this.activeViewModel().beforeDestroy();
-		}
-
-		var mainViewModel = new MainViewModel(this.activeGroup());
-		this.activeViewModel(mainViewModel);
+		var idx = this.groups().indexOf(this.activeGroup());
+		this.log.debug("idx=" + idx);
+		this.activeViewModel(this.viewModels()[idx]);
 	}
 
 	refreshTimeline() {
@@ -122,7 +137,7 @@ class RootViewModel {
 	}
 
 	sendTweet = () => {
-		this.log.debug('sendTweet');
+		this.log.info('sendTweet' + this.newTweet());
 		if (!this.activeAccount()) { throw new Error("no account selected") }
 		
 		var params = new IpcData.NewTweetParams();
@@ -130,6 +145,10 @@ class RootViewModel {
 		params.text = this.newTweet();
 		
 		this.ipc.send(IPC_COMMAND.NEW_TWEET, params);
+		
+		// TODO 結果を見て失敗したらリトライする
+		
+		this.newTweet("");
 	}
 
 }

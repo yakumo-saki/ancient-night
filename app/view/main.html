@@ -72,7 +72,7 @@
               </button>
             </div>
             タブ
-            <select class="" data-bind="value: activeGroup, options: groups, optionsText: 'name'">
+            <select class="" data-bind="value: activeGroup, options: groups, optionsText: 'name', event: { change: onGroupSelected }">
                <option>Tab Group1</option>
             </select>
             <button class="btn btn-large btn-default btn-dropdown pull-right">
@@ -172,9 +172,7 @@
     window.onload = function() {
         window.$ = require('jquery');
 
-        if (Global.debug) {
-          currentWindow.openDevTools();
-        }
+        require('devtron').install()
         
         window.rootViewModel = new RootViewModel();
         window.rootViewModel.initialize();
@@ -194,11 +192,11 @@
 
     };
 
-    var remote = require('remote');
+    var remote = require('electron').remote;
 
     var util = require('util');
     var currentWindow = remote.getCurrentWindow();
-    var dialog = remote.require('dialog');
+    var dialog = remote.require('electron').dialog;
 
     var moment = require('moment');
     var Global = require('../shared/Global');
