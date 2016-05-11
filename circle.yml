@@ -1,14 +1,23 @@
 machine:
   timezone: Asia/Tokyo
   node:
-    version: 6.0.0 
+    version: 5.1.0
+  post:
+    - npm install -g npm@3
+    - npm install -g tsc
+    - npm install -g tsconfig_cli
+    - npm install -g electron-packager
 
-test:
+dependencies:
   override:
-    - echo No test, never mind.
+    - npm install
 
 deployment:
   master:
     branch: master
     commands:
       - echo done
+      
+test:
+  override:
+    - echo No test, never mind.
