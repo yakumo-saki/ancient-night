@@ -13,13 +13,13 @@ deployment:
   production:
     branch: master
     commands:
-      - ./script/github_delete.sh
+      - ./script/github_create_release.sh
       - ./script/github_upload.sh `echo ${CIRCLE_PROJECT_REPONAME}_osx.zip` `echo ${CIRCLE_PROJECT_REPONAME}_osx.zip`
       - ./script/github_upload.sh `echo ${CIRCLE_PROJECT_REPONAME}_win.zip` `echo ${CIRCLE_PROJECT_REPONAME}_win.zip`
   nightly:
     branch: develop
     commands:
-      - ./script/github_delete.sh
+      - ./script/github_create_release.sh
       - ./script/github_upload.sh `echo ${CIRCLE_PROJECT_REPONAME}_osx.zip` `echo ${CIRCLE_PROJECT_REPONAME}`_`date +%Y%m%d%H%M`_osx.zip
       - ./script/github_upload.sh `echo ${CIRCLE_PROJECT_REPONAME}_win.zip` `echo ${CIRCLE_PROJECT_REPONAME}`_`date +%Y%m%d%H%M`_win.zip
      
