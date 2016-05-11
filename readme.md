@@ -1,4 +1,5 @@
-[![Circle CI](https://circleci.com/gh/yakumo-saki/ancient-night.svg?style=svg)](https://circleci.com/gh/yakumo-saki/ancient-night)
+master [![Circle CI](https://circleci.com/gh/yakumo-saki/ancient-night/tree/master.svg?style=svg)](https://circleci.com/gh/yakumo-saki/ancient-night/tree/master)
+develop [![Circle CI](https://circleci.com/gh/yakumo-saki/ancient-night/tree/develop.svg?style=svg)](https://circleci.com/gh/yakumo-saki/ancient-night/tree/develop)
 
 ## Ancient-Night
 
