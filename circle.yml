@@ -1,11 +1,10 @@
 machine:
   timezone: Asia/Tokyo
   node:
-    version: 5.1.0
+    version: 6.0
   post:
-    - npm install -g npm@3
     - npm install -g tsc
-    - npm install -g tsconfig_cli
+    - npm install -g tsconfig-cli
     - npm install -g electron-packager
 
 dependencies:
@@ -16,7 +15,9 @@ deployment:
   master:
     branch: master
     commands:
-      - echo done
+      - cd ~/$CIRCLE_PROJECT_REPONAME/src/main && tsconfig -u && tsc
+      - cd ~/$CIRCLE_PROJECT_REPONAME/src/renderer && tsconfig -u && tsc
+      - cd ~/$CIRCLE_PROJECT_REPONAME/ && npm package
       
 test:
   override:
