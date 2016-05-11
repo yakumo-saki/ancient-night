@@ -14,15 +14,6 @@ fi
 # release を取得する
 echo $API_URL
 JSON=`curl -H "Authorization: token $GITHUB_ACCESS_TOKEN" $API_URL`
-OLD_ID=`echo $JSON | jq '.id'`
-if test $OLD_ID != "null"; then
-   # 存在するreleaseを消す
-    DEL_URL=`echo ${API_BASE}/releases/${OLD_ID}`
-    curl -X DELETE -H "Authorization: token $GITHUB_ACCESS_TOKEN" $DEL_URL 
-fi
-
-# releaseを作成
-
 
 UPLOAD_URL=`echo $JSON | jq '.upload_url'`
 UPLOAD_URL=`echo $UPLOAD_URL | sed -e 's/{?name,label}/?name=/g' | sed -e 's/"//g'`
