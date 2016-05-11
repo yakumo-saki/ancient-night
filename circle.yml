@@ -7,7 +7,7 @@ dependencies:
     - npm install -g typescript
     - npm install -g tsconfig-cli
     - npm install -g electron-packager
-    - apt-get install jq
+    - sudo apt-get install jq
 
 deployment:
   master:
