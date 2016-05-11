@@ -122,7 +122,7 @@ class RootViewModel {
 	}
 
 	sendTweet = () => {
-		this.log.debug('sendTweet');
+		this.log.info('sendTweet' + this.newTweet());
 		if (!this.activeAccount()) { throw new Error("no account selected") }
 		
 		var params = new IpcData.NewTweetParams();
@@ -130,6 +130,10 @@ class RootViewModel {
 		params.text = this.newTweet();
 		
 		this.ipc.send(IPC_COMMAND.NEW_TWEET, params);
+		
+		// TODO 結果を見て失敗したらリトライする
+		
+		this.newTweet("");
 	}
 
 }
