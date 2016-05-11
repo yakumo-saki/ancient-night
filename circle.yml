@@ -1,0 +1,14 @@
+machine:
+  timezone: Asia/Tokyo
+  node:
+    version: 6.0.0 
+
+test:
+  override:
+    - echo No test, never mind.
+
+deployment:
+  master:
+    branch: master
+    commands:
+      - echo done

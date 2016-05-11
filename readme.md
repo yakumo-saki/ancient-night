@@ -1,3 +1,5 @@
+[![Circle CI](https://circleci.com/gh/yakumo-saki/ancient-night.svg?style=svg)](https://circleci.com/gh/yakumo-saki/ancient-night)
+
 ## Ancient-Night
 
 夜フクロウライクなTwitterクライアントになる予定の何か。
@@ -15,6 +17,8 @@ v メジャー.マイナー.バグFIX
 
 ## License
 MIT License, except below. (以下を除いて MIT Licenceです)
+
+ソース内にライセンスが記載されているファイル
 
 /app/resources/sound/* 
 (Not included yet)
