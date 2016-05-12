@@ -139,16 +139,14 @@
               
               <!-- ko if: $data.type == 0 --><!-- tweet -->
               <div class="tweet text" data-bind="text: data.text">内容</div>
-        			<div class="tweet datetime" data-bind="text: new Date(data.created_at).toTwitterRelativeTime('ja')"></div>
               <!-- /ko -->
               <!-- ko if: $data.type == 1 --><!-- mention -->
               <div class="tweet text" data-bind="text: data.text">内容</div>
-        			<div class="tweet text" data-bind="text: new Date(data.created_at).toTwitterRelativeTime('ja')"></div>
               <!-- /ko -->
               <!-- ko if: $data.type == 2 --><!-- dm -->
               <div class="tweet text" data-bind="text: data.text">内容</div>
-        			<div class="tweet text" data-bind="text: new Date(data.created_at).toTwitterRelativeTime('ja')"></div>
               <!-- /ko -->
+        			<div class="tweet datetime" data-bind="text: new Date(created_at()).toTwitterRelativeTime('ja')">10秒前</div>
         		</div>
             
         	</li>

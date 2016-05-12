@@ -27,6 +27,10 @@ class MainTabViewModel {
 	tweets: KnockoutObservableArray<TwitterApi.TwitterEvent> = ko.observableArray([]);
 
 	tabActive: KnockoutObservable<boolean> = ko.observable(false);
+	
+	autoRefresh: any = null;
+
+	timeRefresh: any = null;
 
 	constructor(public tabSetting:IpcData.TabSetting, private account) {
 		this.log.debug('init id=>' + this.id);
@@ -39,21 +43,27 @@ class MainTabViewModel {
 		this.ipc.on(IPC_EVENT.GET_TAB_NEW_EVENT + this.id, (event, arg) => { this.newEvent(arg); });
 
 		if (tabSetting.type == TwitterApi.Type.Tweet) {
-			setTimeout(()=>{ 
+			this.autoRefresh = setInterval(() => { 
 				this.log.debug('auto refresh(tweet) exec');
 			    this.getTimeline() 
 			}, 30000); // 60 / 15min limit 180
 		} else if (tabSetting.type == TwitterApi.Type.Mention) {
-			setTimeout(()=>{ 
+			this.autoRefresh = setInterval(() => { 
 				this.log.debug('auto refresh(Mention) exec');
 				this.getTimeline() 
 			}, 60000); // 60 / 15min limit 180
 		} else if (tabSetting.type == TwitterApi.Type.Mention) {
-			setTimeout(()=>{
+			this.autoRefresh = setInterval(() => {
 				this.log.debug('auto refresh(Mention) exec');
 				this.getTimeline() 
 			}, 300000); // 60 / 15min limit 180		
 		}
+		
+		this.timeRefresh = setInterval( () => {
+			this.tweets().forEach((tw:any) => {
+				tw.created_at.valueHasMutated(); 
+			});
+		 } , 5000);
 
 	}
 	
@@ -78,7 +88,9 @@ class MainTabViewModel {
 	
 	newEvent(event:TwitterApi.TwitterEvent) {
 		// console.log(event);
-		let ev = <TwitterApi.TwitterEvent> event; 
+		// let ev = ko.mapping.fromJS(event);
+		let ev:any = event;
+		ev.created_at = ko.observable(ev.data.created_at);
 		
 		this.tweets.unshift(ev);
 	}
@@ -101,6 +113,10 @@ class MainTabViewModel {
 	beforeDestroy() {
 		// 破棄する前に片付けなければいけないものを片付ける
 		this.log.debug('destroy');
+		
+		clearInterval(this.autoRefresh);
+		clearInterval(this.timeRefresh);
+		
 	}
 
 }
