@@ -188,6 +188,12 @@
             });
         });
 
+        window.addEventListener("beforeunload", function(ev) {
+            if (rootViewModel != null) {
+              rootViewModel.beforeDestroy();
+            }
+        });
+
     };
 
     var remote = require('electron').remote;
