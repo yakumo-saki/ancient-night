@@ -40,23 +40,27 @@ class MainTabViewModel {
 		listenParams.tabSetting = this.tabSetting;
 		this.ipc.send(IPC_COMMAND.TAB_LISTEN, listenParams);
 
-		this.ipc.on(IPC_EVENT.GET_TAB_NEW_EVENT + this.id, (event, arg) => { this.newEvent(arg); });
+		this.ipc.on(IPC_EVENT.GET_TAB_NEW_EVENT + this.id, (event, arg:Array<TwitterApi.TwitterEvent>) => { 
+			arg.forEach((ev) => {
+				this.newEvent(ev);
+			});
+		});
 
 		if (tabSetting.type == TwitterApi.Type.Tweet) {
 			this.autoRefresh = setInterval(() => { 
 				this.log.debug('auto refresh(tweet) exec');
 			    this.getTimeline() 
-			}, 30000); // 60 / 15min limit 180
+			}, 45000); // 15min limit 180
 		} else if (tabSetting.type == TwitterApi.Type.Mention) {
 			this.autoRefresh = setInterval(() => { 
 				this.log.debug('auto refresh(Mention) exec');
 				this.getTimeline() 
-			}, 60000); // 60 / 15min limit 180
+			}, 90000); // 15min limit 180
 		} else if (tabSetting.type == TwitterApi.Type.Mention) {
 			this.autoRefresh = setInterval(() => {
 				this.log.debug('auto refresh(Mention) exec');
 				this.getTimeline() 
-			}, 300000); // 60 / 15min limit 180		
+			}, 300000); // 15min limit 180		
 		}
 		
 		this.timeRefresh = setInterval( () => {
@@ -93,30 +97,18 @@ class MainTabViewModel {
 		ev.created_at = ko.observable(ev.data.created_at);
 		
 		this.tweets.unshift(ev);
+		
 	}
-
-	// /**
-	//  * 表示中のツイートからID指定でツイートを取得する.
-	//  */
-	// getTweetById = (id:string):any => {
-	// 	for (var i = 0; i < this.tweets().length; i++) {
-	// 		var tw = this.tweets()[i];
-	// 		if (tw === null) {
-	// 			continue;
-	// 		} else if (tw.id_str == id) {
-	// 			return tw;
-	// 		}
-	// 	}
-	// 	return null;
-	// }
 
 	beforeDestroy() {
 		// 破棄する前に片付けなければいけないものを片付ける
-		this.log.debug('destroy');
+		this.log.debug('destroy ' + this.id);
 		
+		this.ipc.send(IPC_COMMAND.TAB_NO_LISTEN, this.id);
+
 		clearInterval(this.autoRefresh);
 		clearInterval(this.timeRefresh);
-		
+		this.ipc.removeAllListeners();
 	}
 
 }

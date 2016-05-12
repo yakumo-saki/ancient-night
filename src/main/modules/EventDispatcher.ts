@@ -33,6 +33,9 @@ class EventDispatcher extends events.EventEmitter {
       ipc.on(IPC_COMMAND.TAB_LISTEN, (event:any, arg:IpcData.TabListenParams) => {
         this.subscribe(arg);
       });
+      ipc.on(IPC_COMMAND.TAB_NO_LISTEN, (event:any, arg:string) => {
+        this.unsubscribe(arg);
+      });
     }
     
     /** 
@@ -92,20 +95,36 @@ class EventDispatcher extends events.EventEmitter {
        this.queue.length = 0;
        
        let sendCount = 0;
+       
+       // 送信先振り分け用
+       let buckets:{ [key:string]: any} = new Array();
+       this.subscribers.forEach( (sub) => {
+           buckets[sub.tabId] = new Array<TwitterApi.TwitterEvent>();
+       })
+
        que.forEach( (item) => {
          // サブスクライバごとに送信するか決める
          this.subscribers.forEach((sub) => {
-             //  this.log.debug("event type=" + item.type + " subscriber type=" + sub.tabSetting.type);
-             // this.log.debug("event account=" + item.account_id + " subscriber account=" + sub.tabSetting.account_id);
+
              if (item.type == sub.tabSetting.type 
                  && (!sub.tabSetting.account_id || item.account_id == sub.tabSetting.account_id)) {
-                 let id = IPC_EVENT.GET_TAB_NEW_EVENT + sub.tabId;
-                //  this.log.debug("sending event to " + id);
-                 this.mainWindow.webContents.send(IPC_EVENT.GET_TAB_NEW_EVENT + sub.tabId, item);
                  sendCount++;
+                 
+                 buckets[sub.tabId].push(item);
              }
          })
        });
+
+       // 送信
+       this.subscribers.forEach( (sub) => {
+           let bucket = buckets[sub.tabId];
+           
+           if (bucket.length > 0) {
+             let id = IPC_EVENT.GET_TAB_NEW_EVENT + sub.tabId;
+             this.mainWindow.webContents.send(IPC_EVENT.GET_TAB_NEW_EVENT + sub.tabId, buckets[sub.tabId]);
+           }
+       })
+
        this.log.debug('publish complete Queue size = ' + this.queue.length + " event sent = " + sendCount);
     }
     
@@ -113,8 +132,13 @@ class EventDispatcher extends events.EventEmitter {
         this.subscribers.push(arg);
     }
     
-    unsubscribe(arg:IpcData.TabListenParams) {
-        _.remove(this.subscribers, function(param) { return param.tabId == arg.tabId });
+    unsubscribe(tabId:string) {
+        _.remove(this.subscribers, (param) => { 
+            if (param.tabId == tabId) { 
+                this.log.info("Unsubscribe " + tabId) ; 
+                return true;
+            } 
+        });
     }
     
 }

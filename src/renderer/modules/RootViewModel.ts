@@ -151,5 +151,13 @@ class RootViewModel {
 		this.newTweet("");
 	}
 
+	beforeDestroy() {
+		// ビューモデルを破棄する
+		this.viewModels().forEach((vm) => {
+			vm.beforeDestroy();
+		});
+		this.ipc.removeAllListeners();
+	}
+
 }
 export = RootViewModel;

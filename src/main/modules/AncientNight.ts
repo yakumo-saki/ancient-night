@@ -29,9 +29,9 @@ class AncientNight {
   private mainWindow:Electron.BrowserWindow = null;
   private prefWindow:Electron.BrowserWindow = null;
   
-  private accounts:{ [key:number]: any} = {};
+  private accounts:{ [key:string]: any} = {};
 
-  private twitterClients:{ [key:number]: TwitterClient} = {};
+  private twitterClients:{ [key:string]: TwitterClient} = {};
   
   private log = log4js.getLogger('AncientNight');
 
@@ -134,7 +134,7 @@ class AncientNight {
       _.values<TwitterClient>(this.twitterClients).forEach((client) => {
         client.dispose();
       });
-                
+
       // 内部のアカウント情報を更新
       this.accounts = new Object();
       docs.forEach( (doc) => {
