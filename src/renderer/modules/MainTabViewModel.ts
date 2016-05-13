@@ -46,23 +46,6 @@ class MainTabViewModel {
 			});
 		});
 
-		if (tabSetting.type == TwitterApi.Type.Tweet) {
-			this.autoRefresh = setInterval(() => { 
-				this.log.debug('auto refresh(tweet) exec');
-			    this.getTimeline() 
-			}, 45000); // 15min limit 180
-		} else if (tabSetting.type == TwitterApi.Type.Mention) {
-			this.autoRefresh = setInterval(() => { 
-				this.log.debug('auto refresh(Mention) exec');
-				this.getTimeline() 
-			}, 90000); // 15min limit 180
-		} else if (tabSetting.type == TwitterApi.Type.Mention) {
-			this.autoRefresh = setInterval(() => {
-				this.log.debug('auto refresh(Mention) exec');
-				this.getTimeline() 
-			}, 300000); // 15min limit 180		
-		}
-		
 		this.timeRefresh = setInterval( () => {
 			this.tweets().forEach((tw:any) => {
 				tw.created_at.valueHasMutated(); 
@@ -70,9 +53,7 @@ class MainTabViewModel {
 		 } , 5000);
 
 	}
-	
-	// data
-	// ___________________________
+
 	getTimeline():void {
 		
 		var maxIdTweet = _.maxBy(this.tweets(), (tw) => { return tw.id_str});
@@ -100,13 +81,42 @@ class MainTabViewModel {
 		
 	}
 
+	/** タイムラインの自動更新を開始（リスタート）する. */
+	startAutoRefresh() {
+		this.log.info("start AutoRefresh " + this.id);
+		if (this.tabSetting.type == TwitterApi.Type.Tweet) {
+			this.autoRefresh = setInterval(() => { 
+				this.log.debug('auto refresh(tweet) exec');
+			    this.getTimeline() 
+			}, 90000); // 15min limit 15
+		} else if (this.tabSetting.type == TwitterApi.Type.Mention) {
+			this.autoRefresh = setInterval(() => { 
+				this.log.debug('auto refresh(Mention) exec');
+				this.getTimeline() 
+			}, 1450000); // 15min limit 15
+		} else if (this.tabSetting.type == TwitterApi.Type.Mention) {
+			this.autoRefresh = setInterval(() => {
+				this.log.debug('auto refresh(Mention) exec');
+				this.getTimeline() 
+			}, 1450000); // 15min limit 15		
+		}
+
+	}
+
+	/** タイムラインの自動更新を停止する. */
+	stopAutoRefresh() {
+		this.log.info("stop AutoRefresh " + this.id);
+		clearInterval(this.autoRefresh);
+	}
+
 	beforeDestroy() {
 		// 破棄する前に片付けなければいけないものを片付ける
 		this.log.debug('destroy ' + this.id);
 		
 		this.ipc.send(IPC_COMMAND.TAB_NO_LISTEN, this.id);
 
-		clearInterval(this.autoRefresh);
+		this.stopAutoRefresh()
+
 		clearInterval(this.timeRefresh);
 		this.ipc.removeAllListeners();
 	}

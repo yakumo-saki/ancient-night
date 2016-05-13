@@ -43,7 +43,8 @@ class RootViewModel {
 	activeGroup: KnockoutObservable<IpcData.TabGroupSetting> = ko.observable(null);
 
 	newTweet: KnockoutObservable<string> = ko.observable(null);
-	
+
+	autoRefresh: KnockoutObservable<boolean> = ko.observable(false);	
 
 	// data
 	// ___________________________
@@ -149,6 +150,16 @@ class RootViewModel {
 		// TODO 結果を見て失敗したらリトライする
 		
 		this.newTweet("");
+	}
+
+	startAutoRefresh() {
+		this.viewModels().forEach( (vm) => { vm.startAutoRefresh(); });
+		this.autoRefresh(true);
+	}
+
+	stopAutoRefresh() {
+		this.viewModels().forEach( (vm) => { vm.stopAutoRefresh(); });
+		this.autoRefresh(false);
 	}
 
 	beforeDestroy() {

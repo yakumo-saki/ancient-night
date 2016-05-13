@@ -80,10 +80,10 @@
             </button>
 
             <div class="btn-group">
-              <button class="btn btn-default">
+              <button class="btn btn-default" data-bind="click: startAutoRefresh, css : { active: autoRefresh() == true }">
                 <span class="icon icon-play"></span>
               </button>
-              <button class="active btn btn-default">
+              <button class="btn btn-default" data-bind="click: stopAutoRefresh, css : { active: autoRefresh() == false }">
                 <span class="icon icon-stop"></span>
               </button>
             </div>
@@ -92,6 +92,7 @@
       </header>
 
       <div>
+        
         <!--
         <img src="notfound" height="32" width="32" style="position: absolute; top:0 right:0"/>
         -->
