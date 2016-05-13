@@ -8,6 +8,12 @@ import IpcData = require('../../shared/interfaces/IpcData');
 
 import * as _ from "lodash"; // 実際は lodashを scriptタグで読んでる
 
+class TweetInternal extends TwitterApi.TwitterEvent {
+	
+	active: KnockoutObservable<boolean> = ko.observable(false);
+	created_at: KnockoutObservable<Date> = ko.observable(null);
+}
+
 class MainTabViewModel {
 
 	private log = new Logger('MainTabViewModel');
@@ -24,7 +30,7 @@ class MainTabViewModel {
 	/** タブのID */
 	id:string = this.uuid.v4().substring(0,8); // 衝突したら桁数増やす
 	
-	tweets: KnockoutObservableArray<TwitterApi.TwitterEvent> = ko.observableArray([]);
+	tweets: KnockoutObservableArray<TweetInternal> = ko.observableArray([]);
 
 	tabActive: KnockoutObservable<boolean> = ko.observable(false);
 	
@@ -74,11 +80,21 @@ class MainTabViewModel {
 	newEvent(event:TwitterApi.TwitterEvent) {
 		// console.log(event);
 		// let ev = ko.mapping.fromJS(event);
-		let ev:any = event;
+		let ev:TweetInternal = <TweetInternal>event;
 		ev.created_at = ko.observable(ev.data.created_at);
+		ev.active = ko.observable(false);
 		
 		this.tweets.unshift(ev);
 		
+	}
+
+	setSelectedTweet = (tweet:TweetInternal):void => { 
+		var active = _.find(this.tweets(), (tw) => { return tw.active() })
+		if (active != null) {
+			 active.active(false) 
+		}
+		
+		tweet.active(true);
 	}
 
 	/** タイムラインの自動更新を開始（リスタート）する. */

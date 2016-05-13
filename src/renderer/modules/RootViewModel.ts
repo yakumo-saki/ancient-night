@@ -128,7 +128,6 @@ class RootViewModel {
 		this.log.debug('onGroupSelected');
 		
 		var idx = this.groups().indexOf(this.activeGroup());
-		this.log.debug("idx=" + idx);
 		this.activeViewModel(this.viewModels()[idx]);
 	}
 

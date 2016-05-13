@@ -4,38 +4,38 @@ ul.tweet * {
   -webkit-user-select: text;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  color: white;
-}
+  color: white; }
 
 div.pane.tweet {
   color: #DDD;
-  background-color: #222;    
-}
+  background-color: #222; }
 
 img.tweet.icon {
-  border-radius: 5px;
-}
+  border-radius: 5px; }
 
 ul.tweet {
-  background-color: #222;  
-}
-
-li.tweet.normal {
-  background-color: transparent;
-}
-
-li.tweet.mention {
-  color: #DDD;
-  background-color: #590000;
-}
+  background-color: #222; }
+  ul.tweet li.active {
+    background-color: #116cd6 !important; }
+  ul.tweet li.normal {
+    background-color: transparent; }
+  ul.tweet li.mention {
+    color: #DDD;
+    background-color: #590000; }
 
 .tweet.datetime {
-  position: absolute; top: 0; right: 0;
-}
+  position: absolute;
+  top: 0;
+  right: 0; }
 
 div.tweet.text {
   word-break: break-all;
   text-overflow: initial;
-  white-space: normal;
-}
+  white-space: normal; }
+
+div.tabGroup {
+  display: inline; }
+
+select.tabGroup {
+  height: 1vw; }
 

@@ -40,12 +40,12 @@ gulp.task('default', ['build'] ,function() {
     gulp.watch(AN_TS_RENDERER_IN_DIR + TSCONFIG, ['build-renderer']);
 
     gulp.watch(AN_SHARED_IN_DIR + ALL_TS, ['build-main','build-renderer']);
-    // gulp.watch(AN_SCSS_IN_DIR, ['build-scss']);
+    gulp.watch(AN_SCSS_IN_DIR, ['build-scss']);
 });
 
 gulp.task('watch',['default']);
 
-gulp.task('build', ['build-main','build-renderer']);
+gulp.task('build', ['build-main','build-renderer','build-scss']);
 
 gulp.task('build-main', function(callback) {
     return runSequence('clean-main','build-main-ts',callback);
@@ -68,14 +68,4 @@ gulp.task('clean-renderer', function(cb) {
 
 gulp.task('build-renderer-ts', ['clean-renderer'], shell.task(['tsconfig -u','tsc'], config.shell.tsrenderer) );
 
-// gulp.task('build-scss', function() {
-// 	var inDir = AN_SCSS_IN_DIR;
-// 	var outDir = AN_SCSS_OUT_DIR;
-
-// 	gulp.src(inDir)
-// 	    .pipe(sass(config.sass.options))
-// 	    .on('error', function(err) {
-// 	      console.log(err.message);
-// 	    })
-// 	    .pipe(gulp.dest(outDir));
-// });
+gulp.task('build-scss', shell.task('node-sass ./app/view/css/ancient.scss > ./app/view/css/ancient.css'));
