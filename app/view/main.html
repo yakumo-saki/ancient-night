@@ -109,8 +109,13 @@
         <div class="activeAccountIconDiv">
           <img class="activeAccountIcon" 
               data-bind="attr : { src : activeAccount().profile_image_url_https }">
-          </div>
-        <textarea id="js_tweetText" class="selectable-text tweetText" data-bind="textInput: newTweet"></textarea>
+        </div>
+        <div id="js_tweetText" class="tweetText" contentEditable="true" data-bind="value: newTweet"></div>
+        <div class="leftchar">140</div>
+        <div class="util">
+          <span class="icon icon-cog"></span>
+          <span class="icon icon-down-dir"></span>
+        </div>
       </div>
       
       <!-- ko if: activeViewModel -->

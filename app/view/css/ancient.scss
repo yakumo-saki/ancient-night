@@ -21,11 +21,11 @@ img.tweet.icon {
   border-radius: $icon_border_radius;
 }
 
-div.tweetBox {
+.tweetBox {
   
   position: relative;
   
-  div.activeAccountIconDiv {
+  .activeAccountIconDiv {
 
     display: inline-block;
     position: absolute;
@@ -36,7 +36,7 @@ div.tweetBox {
     border-radius: $icon_border_radius;
     background-color: #000;
    
-    img.activeAccountIcon {
+    .activeAccountIcon {
       margin:0;
       padding:0;
       width:    32px;
@@ -45,20 +45,51 @@ div.tweetBox {
 
       &:hover {
         opacity: 0.7;
+        box-shadow: #999;
       }
     }
+
+  }
+
+  div.util {
+    position: absolute;
+    top:   0px;
+    right: 6px;
   }
   
-  textarea.tweetText {
+  div.leftchar {
+    position: absolute;
+    top:  18px;
+    right: 6px;
+  }
+  
+  .tweetText {
     width: 100%;
-    padding-left: 46px;
+    min-height: 48px;
+    padding-left: 48px;
+    padding-right: 48px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+
+    word-break: break-all;
+    text-overflow: initial;
+    white-space: normal;
+    
+    &:focus { 
+      outline: 0;
+      box-shadow: none;
+    }
+
   }
   
 }
 
-
 ul.tweet {
   background-color: #222;  
+
+  * {
+    color: lightgray;
+  }
 
   li.active {
     background-color: $active_background !important;
@@ -69,7 +100,6 @@ ul.tweet {
   }
 
   li.mention {
-    color: #DDD;
     background-color: #590000;
   }
 }
@@ -77,12 +107,6 @@ ul.tweet {
 
 .tweet.datetime {
   position: absolute; top: 0; right: 0;
-}
-
-div.tweet.text {
-  word-break: break-all;
-  text-overflow: initial;
-  white-space: normal;
 }
 
 div.tabGroup {

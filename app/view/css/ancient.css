@@ -13,9 +13,9 @@ div.pane.tweet {
 img.tweet.icon {
   border-radius: 5px; }
 
-div.tweetBox {
+.tweetBox {
   position: relative; }
-  div.tweetBox div.activeAccountIconDiv {
+  .tweetBox .activeAccountIconDiv {
     display: inline-block;
     position: absolute;
     top: 8px;
@@ -24,37 +24,52 @@ div.tweetBox {
     height: 32px;
     border-radius: 5px;
     background-color: #000; }
-    div.tweetBox div.activeAccountIconDiv img.activeAccountIcon {
+    .tweetBox .activeAccountIconDiv .activeAccountIcon {
       margin: 0;
       padding: 0;
       width: 32px;
       height: 32px;
       border: lightgray 1px solid; }
-      div.tweetBox div.activeAccountIconDiv img.activeAccountIcon:hover {
-        opacity: 0.7; }
-  div.tweetBox textarea.tweetText {
+      .tweetBox .activeAccountIconDiv .activeAccountIcon:hover {
+        opacity: 0.7;
+        box-shadow: #999; }
+  .tweetBox div.util {
+    position: absolute;
+    top: 0px;
+    right: 6px; }
+  .tweetBox div.leftchar {
+    position: absolute;
+    top: 18px;
+    right: 6px; }
+  .tweetBox .tweetText {
     width: 100%;
-    padding-left: 46px; }
+    min-height: 48px;
+    padding-left: 48px;
+    padding-right: 48px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    word-break: break-all;
+    text-overflow: initial;
+    white-space: normal; }
+    .tweetBox .tweetText:focus {
+      outline: 0;
+      box-shadow: none; }
 
 ul.tweet {
   background-color: #222; }
+  ul.tweet * {
+    color: lightgray; }
   ul.tweet li.active {
     background-color: #116cd6 !important; }
   ul.tweet li.normal {
     background-color: transparent; }
   ul.tweet li.mention {
-    color: #DDD;
     background-color: #590000; }
 
 .tweet.datetime {
   position: absolute;
   top: 0;
   right: 0; }
-
-div.tweet.text {
-  word-break: break-all;
-  text-overflow: initial;
-  white-space: normal; }
 
 div.tabGroup {
   display: inline; }

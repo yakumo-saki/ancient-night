@@ -290,34 +290,29 @@ class AncientNight {
               }
             },
             {
-              label: 'リフレッシュ',
-              click: () => {
-                this.refreshAccount(true);
-              }
-            },
-            {
               label: 'list'
             }
           ]
         },
         {
-          label: 'ビュー',
+          label: '開発',
           submenu: [
             {
-              label: 'Reload',
+              label: 'リロード',
               accelerator: 'Command+R',
               click: () => { this.mainWindow.reload(); }
             },
             {
-              label: 'Toggle Full Screen',
-              accelerator: 'Ctrl+Command+F',
-              click: () => { this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen()); }
-            },
-            {
-              label: 'Toggle Developer Tools',
+              label: 'Developer Tools',
               accelerator: 'Alt+Command+I',
               click: () => {
-                  this.mainWindow.webContents.toggleDevTools() 
+                  this.mainWindow.webContents.openDevTools() 
+              }
+            },
+            {
+              label: 'アカウント情報再読み込み',
+              click: () => {
+                this.refreshAccount(true);
               }
             },
           ]
