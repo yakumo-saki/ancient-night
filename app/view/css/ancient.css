@@ -68,6 +68,11 @@ ul.tweet {
     background-color: transparent; }
   ul.tweet li.mention {
     background-color: #590000; }
+  ul.tweet .tweet.text {
+    padding-right: 48px;
+    word-break: break-all;
+    text-overflow: initial;
+    white-space: normal; }
 
 .tweet.datetime {
   position: absolute;

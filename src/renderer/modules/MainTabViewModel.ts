@@ -83,8 +83,18 @@ class MainTabViewModel {
 		let ev:TweetInternal = <TweetInternal>event;
 		ev.created_at = ko.observable(ev.data.created_at);
 		ev.active = ko.observable(false);
+		ev.data.text = this.replaceTweetText(ev); 
 		
 		this.tweets.unshift(ev);
+		
+	}
+
+	private replaceTweetText(ev:TweetInternal):string {
+		
+		var text = ev.data.text;
+		text = text.replace("\n", "<br>");
+		
+		return text;
 		
 	}
 

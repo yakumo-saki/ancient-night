@@ -3,6 +3,8 @@
 $active_background: #116cd6;
 $icon_border_radius:  5px;
 
+$tweet_padding: 48px;
+
 ul.tweet * {
   cursor: auto;
   -webkit-user-drag: text;
@@ -66,8 +68,8 @@ img.tweet.icon {
   .tweetText {
     width: 100%;
     min-height: 48px;
-    padding-left: 48px;
-    padding-right: 48px;
+    padding-left: $tweet_padding;
+    padding-right: $tweet_padding;
     padding-top: 3px;
     padding-bottom: 3px;
 
@@ -106,6 +108,14 @@ ul.tweet {
   li.mention {
     background-color: #590000;
   }
+
+  .tweet.text {
+    padding-right: $tweet_padding;
+    word-break: break-all;
+    text-overflow: initial;
+    white-space: normal;
+  }
+
 }
 
 
