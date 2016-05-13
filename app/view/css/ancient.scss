@@ -1,6 +1,7 @@
 
 
 $active_background: #116cd6;
+$icon_border_radius:  5px;
 
 ul.tweet * {
   cursor: auto;
@@ -17,8 +18,44 @@ div.pane.tweet {
 }
 
 img.tweet.icon {
-  border-radius: 5px;
+  border-radius: $icon_border_radius;
 }
+
+div.tweetBox {
+  
+  position: relative;
+  
+  div.activeAccountIconDiv {
+
+    display: inline-block;
+    position: absolute;
+    top:      8px;
+    left:     8px;
+    width:    32px;
+    height:   32px;
+    border-radius: $icon_border_radius;
+    background-color: #000;
+   
+    img.activeAccountIcon {
+      margin:0;
+      padding:0;
+      width:    32px;
+      height:   32px;
+      border:   lightgray 1px solid;     
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+  }
+  
+  textarea.tweetText {
+    width: 100%;
+    padding-left: 46px;
+  }
+  
+}
+
 
 ul.tweet {
   background-color: #222;  

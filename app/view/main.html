@@ -95,17 +95,22 @@
         </div>
       </header>
 
-      <div>
+      <div class="tweetBox">
         
         <!--
-        <img src="notfound" height="32" width="32" style="position: absolute; top:0 right:0"/>
+        <img src="notfound" height="32" width="32" style="position: absolute; top:0; right:0;"/>
         -->
-        アカウント
+        <!--
         <select class="" data-bind="value: activeAccount, options: accounts, optionsText: 'name'">
             <option>account1</option>
             <option>account2</option>
         </select>
-        <textarea id="js_tweetText" class="selectable-text" style="width: 100%;" data-bind="textInput: newTweet"></textarea>
+        -->
+        <div class="activeAccountIconDiv">
+          <img class="activeAccountIcon" 
+              data-bind="attr : { src : activeAccount().profile_image_url_https }">
+          </div>
+        <textarea id="js_tweetText" class="selectable-text tweetText" data-bind="textInput: newTweet"></textarea>
       </div>
       
       <!-- ko if: activeViewModel -->

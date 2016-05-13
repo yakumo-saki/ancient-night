@@ -69,13 +69,13 @@ class RootViewModel {
 		this.accounts.removeAll();
 		Array.prototype.push.apply(this.accounts(), accounts);
 		
-		// if (this.accounts().length > 0) {
-		// 	this.activeAccount(this.accounts()[0]);
-		// } else {
-		// 	this.log.warn('no account has been set up');
-		// }
-		
 		// TODO 以前選択していたものがあればそちらを選択
+		if (this.accounts().length > 0) {
+			this.activeAccount(this.accounts()[0]);
+		} else {
+			this.log.warn('no account has been set up');
+		}
+		
 	}
 
 	/** タブグループ情報を更新した際の処理 */
