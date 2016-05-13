@@ -1,3 +1,4 @@
+@charset "UTF-8";
 ul.tweet * {
   cursor: auto;
   -webkit-user-drag: text;
@@ -54,11 +55,13 @@ img.tweet.icon {
     .tweetBox .tweetText:focus {
       outline: 0;
       box-shadow: none; }
+    .tweetBox .tweetText:hover {
+      cursor: text; }
 
 ul.tweet {
   background-color: #222; }
   ul.tweet * {
-    color: lightgray; }
+    color: ＃CCC; }
   ul.tweet li.active {
     background-color: #116cd6 !important; }
   ul.tweet li.normal {

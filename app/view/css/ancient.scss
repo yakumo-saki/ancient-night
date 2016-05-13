@@ -80,6 +80,10 @@ img.tweet.icon {
       box-shadow: none;
     }
 
+    &:hover { 
+      cursor: text;
+    }
+
   }
   
 }
@@ -88,7 +92,7 @@ ul.tweet {
   background-color: #222;  
 
   * {
-    color: lightgray;
+    color: ＃CCC;
   }
 
   li.active {
