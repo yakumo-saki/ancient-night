@@ -1,0 +1,121 @@
+
+
+$active_background: #116cd6;
+$icon_border_radius:  5px;
+
+ul.tweet * {
+  cursor: auto;
+  -webkit-user-drag: text;
+  -webkit-user-select: text;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  color: white;
+}
+
+div.pane.tweet {
+  color: #DDD;
+  background-color: #222;    
+}
+
+img.tweet.icon {
+  border-radius: $icon_border_radius;
+}
+
+.tweetBox {
+  
+  position: relative;
+  
+  .activeAccountIconDiv {
+
+    display: inline-block;
+    position: absolute;
+    top:      8px;
+    left:     8px;
+    width:    32px;
+    height:   32px;
+    border-radius: $icon_border_radius;
+    background-color: #000;
+   
+    .activeAccountIcon {
+      margin:0;
+      padding:0;
+      width:    32px;
+      height:   32px;
+      border:   lightgray 1px solid;     
+
+      &:hover {
+        opacity: 0.7;
+        box-shadow: #999;
+      }
+    }
+
+  }
+
+  div.util {
+    position: absolute;
+    top:   0px;
+    right: 6px;
+  }
+  
+  div.leftchar {
+    position: absolute;
+    top:  18px;
+    right: 6px;
+  }
+  
+  .tweetText {
+    width: 100%;
+    min-height: 48px;
+    padding-left: 48px;
+    padding-right: 48px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+
+    word-break: break-all;
+    text-overflow: initial;
+    white-space: normal;
+    
+    &:focus { 
+      outline: 0;
+      box-shadow: none;
+    }
+
+    &:hover { 
+      cursor: text;
+    }
+
+  }
+  
+}
+
+ul.tweet {
+  background-color: #222;  
+
+  * {
+    color: ＃CCC;
+  }
+
+  li.active {
+    background-color: $active_background !important;
+  }
+
+  li.normal {
+    background-color: transparent;
+  }
+
+  li.mention {
+    background-color: #590000;
+  }
+}
+
+
+.tweet.datetime {
+  position: absolute; top: 0; right: 0;
+}
+
+div.tabGroup {
+  display: inline;
+}
+select.tabGroup {
+  height: 1vw;
+}

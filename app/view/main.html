@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="lib/photon/css/photon.min.css">
     <link rel="stylesheet" href="css/ancient.css">
 
+    <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css">
+
+
     <!-- Javascript -->
     <script src="lib/jquery/jquery-2.1.4.min.js"></script>
     <script src="lib/knockout/knockout-3.4.0.js"></script>
@@ -53,16 +56,32 @@
         <h1 class="title" data-bind="text: appName"></h1>
 
         <div class="toolbar-actions">
-            <button class="btn btn-large btn-default" data-bind="click: refreshTimeline" id="btn-jp">
-              <span class="icon icon-cw"></span>
-              &nbsp;表示更新
+            <button class="btn btn-large btn-default" data-bind="click: refreshTimeline" id="btn-jp" title="手動更新（表示されているタブ）">
+              <span class="icon icon-cw icon-text"></span>更新
             </button>
+
+            <div class="btn-group">
+              <button class="btn btn-large btn-default" data-bind="click: startAutoRefresh, css : { active: autoRefresh() == true }" title="自動更新を開始">
+                <span class="icon icon-play"></span>
+              </button>
+              <button class="btn btn-large btn-default" data-bind="click: stopAutoRefresh, css : { active: autoRefresh() == false }" title="自動更新を停止">
+                <span class="icon icon-stop"></span>
+              </button>
+            </div>
+            
+            <div class="tabGroup">
+              タブ
+              <select class="tabGroup" data-bind="value: activeGroup, options: groups, optionsText: 'name', event: { change: onGroupSelected }">
+                <option>Tab Group1</option>
+              </select>
+            
+            </div>
+
             <!--
             <button class="btn btn-large btn-default">
               <span class="icon icon-check"></span>
               &nbsp;既読にする
             </button>
-            -->
             <div class="btn-group">
               <button class="btn btn-large btn-default">
                 <span class="icon icon-user"></span>
@@ -71,36 +90,32 @@
                 <span class="icon icon-chat"></span>
               </button>
             </div>
-            タブ
-            <select class="" data-bind="value: activeGroup, options: groups, optionsText: 'name', event: { change: onGroupSelected }">
-               <option>Tab Group1</option>
-            </select>
-            <button class="btn btn-large btn-default btn-dropdown pull-right">
-              <span class="icon icon-newspaper"></span>
-            </button>
-
-            <div class="btn-group">
-              <button class="btn btn-default">
-                <span class="icon icon-play"></span>
-              </button>
-              <button class="active btn btn-default">
-                <span class="icon icon-stop"></span>
-              </button>
-            </div>
+            -->
 
         </div>
       </header>
 
-      <div>
+      <div class="tweetBox">
+        
         <!--
-        <img src="notfound" height="32" width="32" style="position: absolute; top:0 right:0"/>
+        <img src="notfound" height="32" width="32" style="position: absolute; top:0; right:0;"/>
         -->
-        アカウント
+        <!--
         <select class="" data-bind="value: activeAccount, options: accounts, optionsText: 'name'">
             <option>account1</option>
             <option>account2</option>
         </select>
-        <textarea id="js_tweetText" class="selectable-text" style="width: 100%;" data-bind="textInput: newTweet"></textarea>
+        -->
+        <div class="activeAccountIconDiv">
+          <img class="activeAccountIcon" 
+              data-bind="attr : { src : activeAccount().profile_image_url_https }">
+        </div>
+        <div id="js_tweetText" class="tweetText" contentEditable="true" data-bind="value: newTweet"></div>
+        <div class="leftchar">140</div>
+        <div class="util">
+          <span class="icon icon-cog"></span>
+          <span class="icon icon-down-dir"></span>
+        </div>
       </div>
       
       <!-- ko if: activeViewModel -->
@@ -112,6 +127,10 @@
           <span data-bind="text: tabSetting.name">タイムライン</span>
         </div>
         <!-- /ko -->
+        <div class="tab-item tab-item-fixed hiddenTab" data-bind="">
+          <span class="icon icon-archive"></span>
+          <span class="icon icon-down-dir"></span>
+        </div>
       </div><!-- tab-group -->
 
       <!-- ko with: activeTab -->
@@ -119,7 +138,7 @@
         <ul class="list-group tweet">
 
         	<!-- ko if: tweets().length == 0 -->
-        	<li class="list-group-item">
+        	<li class="list-group-item active">
         		<div class="media-body" style="position: relative;">
         			<strong>エラー</strong>
               <div style="text-wrap: normal; word-break: break-all;">表示するツイートが存在しない</div>
@@ -128,7 +147,8 @@
         	<!-- /ko -->
           
         	<!-- ko foreach: tweets -->
-        	<li class="list-group-item tweet" data-bind="css : { normal: $data.type == 0, mention: $data.type == 1, dm: $data.type == 2}">
+        	<li class="list-group-item tweet" data-bind="css : { active: active() == true, normal: $data.type == 0, mention: $data.type == 1, dm: $data.type == 2}
+                                                       , click : $parent.setSelectedTweet">
             <!-- ko if: $data.type == 0 || $data.type == 1 --><!-- tweet or mention -->
         		<img class="media-object pull-left tweet icon" width="48" height="48"
         			data-bind="attr: { src: data.user.profile_image_url_https }">
@@ -215,6 +235,10 @@
     var Global = require('../shared/Global');
 
     var RootViewModel = require('../renderer/Modules/RootViewModel');
+
+    function activeTab() {
+      return rootViewModel.activeViewModel().activeTab();
+    }
 
     function hello(){
         var options = {

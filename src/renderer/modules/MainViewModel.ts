@@ -28,6 +28,8 @@ class MainViewModel {
 	
 	activeTab: KnockoutObservable<MainTabViewModel> = ko.observable(null);
 
+	autoRefresh: KnockoutObservable<boolean> = ko.observable(false);
+
 	footerMessage: KnockoutObservable<string> = ko.observable("");
 
 	// data
@@ -54,6 +56,20 @@ class MainViewModel {
 		this.log.debug('refreshTimeline');
 		// アクティブタブに転送するだけ
 		this.activeTab().getTimeline();
+	}
+
+	startAutoRefresh() {
+		this.tabs().forEach( (tab) => {
+			tab.startAutoRefresh();
+		});
+		this.autoRefresh(true);
+	}
+
+	stopAutoRefresh() {
+		this.tabs().forEach( (tab) => {
+			tab.stopAutoRefresh();
+		});
+		this.autoRefresh(true);
 	}
 
 	switchTab = (target: MainTabViewModel) => {

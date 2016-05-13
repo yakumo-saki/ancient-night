@@ -43,7 +43,8 @@ class RootViewModel {
 	activeGroup: KnockoutObservable<IpcData.TabGroupSetting> = ko.observable(null);
 
 	newTweet: KnockoutObservable<string> = ko.observable(null);
-	
+
+	autoRefresh: KnockoutObservable<boolean> = ko.observable(false);	
 
 	// data
 	// ___________________________
@@ -68,13 +69,13 @@ class RootViewModel {
 		this.accounts.removeAll();
 		Array.prototype.push.apply(this.accounts(), accounts);
 		
-		// if (this.accounts().length > 0) {
-		// 	this.activeAccount(this.accounts()[0]);
-		// } else {
-		// 	this.log.warn('no account has been set up');
-		// }
-		
 		// TODO 以前選択していたものがあればそちらを選択
+		if (this.accounts().length > 0) {
+			this.activeAccount(this.accounts()[0]);
+		} else {
+			this.log.warn('no account has been set up');
+		}
+		
 	}
 
 	/** タブグループ情報を更新した際の処理 */
@@ -127,7 +128,6 @@ class RootViewModel {
 		this.log.debug('onGroupSelected');
 		
 		var idx = this.groups().indexOf(this.activeGroup());
-		this.log.debug("idx=" + idx);
 		this.activeViewModel(this.viewModels()[idx]);
 	}
 
@@ -149,6 +149,16 @@ class RootViewModel {
 		// TODO 結果を見て失敗したらリトライする
 		
 		this.newTweet("");
+	}
+
+	startAutoRefresh() {
+		this.viewModels().forEach( (vm) => { vm.startAutoRefresh(); });
+		this.autoRefresh(true);
+	}
+
+	stopAutoRefresh() {
+		this.viewModels().forEach( (vm) => { vm.stopAutoRefresh(); });
+		this.autoRefresh(false);
 	}
 
 	beforeDestroy() {
