@@ -9,20 +9,28 @@ class Logger {
     
     constructor(public appender:string) { }
     
-    public debug(msg:string):void {
-        this.log(Log.LogLevel.DEBUG, msg.toString());        
+    public debug(msg:any):void {
+        console.debug(this.toLogString(msg));
+        this.log(Log.LogLevel.DEBUG, this.toLogString(msg));        
     }
 
-    public info(msg:string):void {
-        this.log(Log.LogLevel.INFO, msg.toString());        
+    public info(msg:any):void {
+        console.info(this.toLogString(msg));
+        this.log(Log.LogLevel.INFO, this.toLogString(msg));        
     }
 
-    public warn(msg:string):void {
-        this.log(Log.LogLevel.WARN, msg.toString());        
+    public warn(msg:any):void {
+        console.warn(this.toLogString(msg));
+        this.log(Log.LogLevel.WARN, this.toLogString(msg));        
     }
 
-    public error(msg:string):void {
-        this.log(Log.LogLevel.ERROR, msg.toString());        
+    public error(msg:any):void {
+        console.error(this.toLogString(msg));
+        this.log(Log.LogLevel.ERROR, this.toLogString(msg));        
+    }
+    
+    private toLogString(msg:any):string {
+        return this.appender + " " + msg.toString();
     }
     
     private log(level:Log.LogLevel, msg:string) {

@@ -78,6 +78,16 @@
             <button class="btn btn-large btn-default btn-dropdown pull-right">
               <span class="icon icon-newspaper"></span>
             </button>
+
+            <div class="btn-group">
+              <button class="btn btn-default">
+                <span class="icon icon-play"></span>
+              </button>
+              <button class="active btn btn-default">
+                <span class="icon icon-stop"></span>
+              </button>
+            </div>
+
         </div>
       </header>
 
@@ -167,10 +177,10 @@
   </body>
 
 <script>
+    require('devtron').install();
+    
     window.onload = function() {
         window.$ = require('jquery');
-
-        require('devtron').install()
         
         window.rootViewModel = new RootViewModel();
         window.rootViewModel.initialize();
@@ -182,8 +192,7 @@
 
         $(document).ready(function() {
             var tgt = document.getElementById('js_tweetText')
-            console.log('mousetrap ' + tgt );
-            Mousetrap(document.getElementById('js_tweetText')).bind("mod+enter",function() {
+            Mousetrap(tgt).bind("mod+enter",function() {
                 rootViewModel.sendTweet();
             });
         });
