@@ -20,11 +20,13 @@ API_URL=$API_URL/$VER
 ## /共通部
 
 # release を取得する
-echo $API_URL
+echo API URL = $API_URL
 JSON=`curl -H "Authorization: token $GITHUB_ACCESS_TOKEN" $API_URL`
 
 UPLOAD_URL=`echo $JSON | jq '.upload_url'`
 UPLOAD_URL=`echo $UPLOAD_URL | sed -e 's/{?name,label}/?name=/g' | sed -e 's/"//g'`
+
+echo UPLOAD URL = $UPLOAD_URL
 
 UPLOAD_FILE=$CIRCLE_ARTIFACTS/$1
 curl --data-binary @$UPLOAD_FILE -H "Content-Type: application/zip" -H "Authorization: token $GITHUB_ACCESS_TOKEN" $UPLOAD_URL$2
