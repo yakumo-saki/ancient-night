@@ -12,8 +12,8 @@ dependencies:
 
 checkout:
   post:
-    - sed -i -E s/KEY/$COUSUMER_KEY/g ./src/shared/GlobalSecret.ts
-    - sed -i -E s/SECRET/$COUSUMER_SECRET/g ./src/shared/GlobalSecret.ts
+    - sed -i -E s/___YOUR_KEY___/$CONSUMER_KEY/g ./src/shared/GlobalSecret.ts
+    - sed -i -E s/___YOUR_SECRET___/$CONSUMER_SECRET/g ./src/shared/GlobalSecret.ts
 
 deployment:
   production:
@@ -31,11 +31,11 @@ deployment:
      
 test:
   pre:
+  override:
     - cd ~/$CIRCLE_PROJECT_REPONAME/src/main && tsconfig -u && tsc
     - cd ~/$CIRCLE_PROJECT_REPONAME/src/renderer && tsconfig -u && tsc
-  override:
-    - echo No test, never mind.
-  post:
     - cd ~/$CIRCLE_PROJECT_REPONAME && npm run package_circleci
     - zip -r `echo ${CIRCLE_ARTIFACTS}/${CIRCLE_PROJECT_REPONAME}_osx.zip` ~/$CIRCLE_PROJECT_REPONAME/build/ancient-night-darwin-x64/
     - zip -r `echo ${CIRCLE_ARTIFACTS}/${CIRCLE_PROJECT_REPONAME}_win.zip` ~/$CIRCLE_PROJECT_REPONAME/build/ancient-night-win32-x64/
+    - echo No test, continue anyway.
+  post:
