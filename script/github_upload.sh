@@ -2,14 +2,22 @@
 
 # param1: filename ( file must be at $CIRCLE_ARTIFACTS )
 # param2: filename on github.
+echo params $1 $2
+
+## 共通部
 API_BASE=https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
 API_URL=$API_BASE/releases/tags
+
+VER=`cat ~/$CIRCLE_PROJECT_REPONAME/package.json | jq '.version'`
+PRE=false
+
 if test $CIRCLE_BRANCH = "develop"; then
-   API_URL=$API_URL/preview
-else
-   VER=`cat ~/$CIRCLE_PROJECT_REPONAME/package.json | jq '.version'`
-   API_URL=$API_URL/$VER
+   VER=$VER_beta
+   PRE=true
 fi
+
+API_URL=$API_URL/$VER
+## /共通部
 
 # release を取得する
 echo $API_URL

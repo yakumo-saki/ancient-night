@@ -1,16 +1,22 @@
 #!/usr/bin/env bash
 
+echo params $1
+
+## 共通部
 API_BASE=https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
 API_URL=$API_BASE/releases/tags
+
+VER=`cat ~/$CIRCLE_PROJECT_REPONAME/package.json | jq '.version'`
+PRE=false
+
 if test $CIRCLE_BRANCH = "develop"; then
-   VER=preview
+   VER=$VER_beta
    PRE=true
-   API_URL=$API_URL/preview
-else
-   VER=`cat ~/$CIRCLE_PROJECT_REPONAME/package.json | jq '.version'`
-   PRE=false
-   API_URL=$API_URL/$VER
 fi
+
+API_URL=$API_URL/$VER
+## /共通部
+
 
 # release を取得する
 echo $API_URL
