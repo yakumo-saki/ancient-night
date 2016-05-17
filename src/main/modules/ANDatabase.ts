@@ -4,6 +4,7 @@ import IpcData = require('../../shared/interfaces/IpcData');
 import nedb = require('nedb');
 
 class Datastores {
+    config: any;
     users: any;
     tweets: any;
     favorites: any;
@@ -22,16 +23,17 @@ class ANDatabase {
 
     // 実質これにしか用事がない
     private db = new Datastores;
-     
+    
     constructor(appPath:string) {
         this.log.debug('db load =>' + appPath);
+        this.db.config = new this.Datastore({filename: appPath + '/db_config', autoload: true});
         this.db.users = new this.Datastore({filename: appPath + '/db_users', autoload: true});
         this.db.tweets = new this.Datastore({filename: appPath + '/db_tweets', autoload: true});
         this.db.favorites = new this.Datastore({filename: appPath + '/db_favorites', autoload: true});
         this.db.accounts = new this.Datastore({filename: appPath + '/db_accounts', autoload: true});
         this.db.tabGroupSettings = new this.Datastore({filename: appPath + '/db_tabGroupSettings', autoload: true});
 
-        this.log.debug('db load done..');
+        this.log.debug('db load done.');
     }
 
     addAccount(account:TwitterApi.UserInfo):Promise<IpcData.TabGroupSetting> {

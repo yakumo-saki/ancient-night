@@ -23,6 +23,7 @@
         "../shared/GlobalSecret.ts",
         "../shared/interfaces/IpcData.ts",
         "../shared/interfaces/TwitterApi.ts",
+        "interfaces/Config.ts",
         "modules/AncientNight.ts",
         "modules/ANDatabase.ts",
         "modules/ANDBCacheAdapter.ts",

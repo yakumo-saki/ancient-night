@@ -207,6 +207,7 @@ class AncientNight {
     });
   }
   
+  /** ツイートします */
   sendNewTweet(tweet:IpcData.NewTweetParams) {
     this.log.debug(JSON.stringify(tweet));
     var client:TwitterClient = this.twitterClients[tweet.account_id];
