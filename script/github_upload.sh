@@ -27,6 +27,9 @@ UPLOAD_URL=`echo $JSON | jq '.upload_url'`
 UPLOAD_URL=`echo $UPLOAD_URL | sed -e 's/{?name,label}/?name=/g' | sed -e 's/"//g'`
 
 echo UPLOAD URL = $UPLOAD_URL
+if test $UPLOAD_URL = "null"; then
+    echo $JSON
+fi
 
 UPLOAD_FILE=$CIRCLE_ARTIFACTS/$1
 curl --data-binary @$UPLOAD_FILE -H "Content-Type: application/zip" -H "Authorization: token $GITHUB_ACCESS_TOKEN" $UPLOAD_URL$2
