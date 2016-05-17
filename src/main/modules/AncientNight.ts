@@ -171,7 +171,7 @@ class AncientNight {
   }
 
   refreshTabGroups() {
-    this.DB.getTabGroups((docs) => {
+    this.DB.getTabGroups((docs:Array<IpcData.TabGroupSetting>) => {
       this.log.debug('refreshTabGroups: TabGroup count => ' + docs.length);
       this.mainWindow.webContents.send(IPC_EVENT.GET_TAB_GROUPS_RESULT, docs);
     });
@@ -181,7 +181,6 @@ class AncientNight {
       let client = this.twitterClients[arg.tabSetting.account_id];
       if (client == null) throw new Error("client is null id=" + arg.tabSetting.account_id);
 
-      var method = null;      
       if (arg.tabSetting.type == TwitterApi.Type.Tweet) {
         client.getTimeline(100, arg.minId);
       } else if (arg.tabSetting.type == TwitterApi.Type.Mention) {

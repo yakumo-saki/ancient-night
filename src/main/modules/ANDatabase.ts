@@ -1,6 +1,16 @@
 import TwitterApi = require('../../shared/interfaces/TwitterApi');
 import IpcData = require('../../shared/interfaces/IpcData');
 
+import nedb = require('nedb');
+
+class Datastores {
+    users: any;
+    tweets: any;
+    favorites: any;
+    accounts: any;
+    tabGroupSettings: any;
+}
+
 /**
  * DBアクセス周り.
  * 基本promise
@@ -11,7 +21,7 @@ class ANDatabase {
     private log = require('log4js').getLogger('ANDatabase');
 
     // 実質これにしか用事がない
-    private db = {users: null, tweets: null, favorites: null, accounts: null, tabGroupSettings:null};
+    private db = new Datastores;
      
     constructor(appPath:string) {
         this.log.debug('db load =>' + appPath);
@@ -26,7 +36,7 @@ class ANDatabase {
 
     addAccount(account:TwitterApi.UserInfo):Promise<IpcData.TabGroupSetting> {
         this.log.debug(JSON.stringify(account));
-        this.db.accounts.insert(account, (err, newAccount) => {
+        this.db.accounts.insert(account, (err:any, newAccount:TwitterApi.UserInfo) => {
             this.log.debug('db addAccount done' + JSON.stringify(newAccount));            
         });
         
@@ -55,7 +65,7 @@ class ANDatabase {
         tg.tabs.push(dm);
 
         return new Promise<IpcData.TabGroupSetting>((resolve, reject) => {
-            this.db.tabGroupSettings.insert(tg, (err, newDoc) => {
+            this.db.tabGroupSettings.insert(tg, (err:any, newDoc:IpcData.TabGroupSetting) => {
                 if (!err) {
                     resolve(newDoc);                    
                 } else {
@@ -80,8 +90,8 @@ class ANDatabase {
      */
     deleteAccount(id_str:string):Promise<void> {
         this.log.debug('Delete account ' + id_str);
-        return new Promise<void>((resolve, reject) => {
-            this.db.accounts.delete({"id_str" : id_str } ,  {multi: false} ,(err, numRemoved) => {
+        return new Promise<any>((resolve:any, reject:any) => {
+            this.db.accounts.delete({"id_str" : id_str } ,  {multi: false} ,(err:any, numRemoved:number) => {
                 if (!err) {
                     resolve(numRemoved);
                 } else {
@@ -91,7 +101,7 @@ class ANDatabase {
         });
     }
 
-    getTabGroups(callback) {
+    getTabGroups(callback:any) {
         this.db.tabGroupSettings.find({}, (err:any, docs:any) => {
             this.log.debug('db getTabGroups done count =>' + docs.length);
             callback(docs);
@@ -104,9 +114,9 @@ class ANDatabase {
             this.db.tweets.find({})
                           .sort({id_str: -1})
                           .limit(2000)
-                          .exec((err, doc) => {
+                          .exec((err:any, doc:Array<TwitterApi.TwitterEvent>) => {
                 if (!err) {
-                    resolve(doc);                    
+                    resolve(doc);
                 } else {
                     reject(err);
                 }
