@@ -18,8 +18,8 @@
     "debug": "electron --debug .",
     "package": "npm run package_mac && npm run package_win",
     "package_circleci": "npm run package_mac && npm run package_win_noicon",
-    "package_mac": "electron-packager . ancient-night --platform=darwin --icon=./app/resources/icons/app.icns --arch=x64 --version=1.0.1 --overwrite --out ./build",
-    "package_win": "electron-packager . ancient-night --platform=win32 --icon=./app/resources/icons/app.ico --arch=x64 --version=1.0.1 --overwrite --out ./build",
+    "package_mac": "electron-packager . ancient-night --platform=darwin --icon=./app/resources/icons/app.icns --arch=x64 --version=1.1.0 --overwrite --out ./build",
+    "package_win": "electron-packager . ancient-night --platform=win32 --icon=./app/resources/icons/app.ico --arch=x64 --version=1.1.0 --overwrite --out ./build",
     "package_win_noicon": "electron-packager . ancient-night --platform=win32 --arch=x64 --version=1.0.1 --overwrite --out ./build",
     "watch": "gulp watch"
   },
