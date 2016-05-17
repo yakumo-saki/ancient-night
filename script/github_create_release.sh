@@ -17,6 +17,7 @@ fi
 API_URL=$API_URL/$VER
 ## /共通部
 
+echo Release name => $VER
 
 # release を取得する
 echo $API_URL
