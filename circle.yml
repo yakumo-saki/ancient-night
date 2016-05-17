@@ -10,6 +10,11 @@ dependencies:
     - npm install -g node-sass
     - sudo apt-get install jq
 
+checkout:
+  post:
+    - sed -i -E s/KEY/$COUSUMER_KEY/g ./src/shared/GlobalSecret.ts
+    - sed -i -E s/SECRET/$COUSUMER_SECRET/g ./src/shared/GlobalSecret.ts
+
 deployment:
   production:
     branch: master
