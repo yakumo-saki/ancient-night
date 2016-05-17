@@ -7,14 +7,15 @@ API_BASE=https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_R
 API_URL=$API_BASE/releases/tags
 
 VER=`cat ~/$CIRCLE_PROJECT_REPONAME/package.json | jq '.version'`
-PRE=false
+VER=`echo ${VER} | sed s/\"//g`
 
-if test $CIRCLE_BRANCH = "develop"; then
-   VER=`echo ${VER} | sed s/\"//g`
+if test $CIRCLE_BRANCH = "master"; then
+   PRE=false
+else
    VER=`echo ${VER}_beta`
-   VER="$VER"
    PRE=true
 fi
+VER="$VER"
 
 API_URL=$API_URL/$VER
 ## /共通部
