@@ -10,7 +10,9 @@ VER=`cat ~/$CIRCLE_PROJECT_REPONAME/package.json | jq '.version'`
 PRE=false
 
 if test $CIRCLE_BRANCH = "develop"; then
+   VER=`echo ${VER} | sed s/\"//g`
    VER=`echo ${VER}_beta`
+   VER="$VER"
    PRE=true
 fi
 
