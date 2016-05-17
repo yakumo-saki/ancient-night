@@ -10,14 +10,14 @@ VER=`cat ~/$CIRCLE_PROJECT_REPONAME/package.json | jq '.version'`
 PRE=false
 
 if test $CIRCLE_BRANCH = "develop"; then
-   VER=$VER_beta
+   VER=`echo ${VER}_beta`
    PRE=true
 fi
 
 API_URL=$API_URL/$VER
 ## /共通部
 
-echo Release name => $VER
+echo Release name = $VER
 
 # release を取得する
 echo $API_URL
