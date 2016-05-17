@@ -34,5 +34,5 @@ if test $UPLOAD_URL = "null"; then
 fi
 
 UPLOAD_FILE=$CIRCLE_ARTIFACTS/$1
-echo UPLOADING $UPLOAD_FILE  (display name = $2)
+echo UPLOADING $UPLOAD_FILE / DisplayName $2
 curl -v --data-binary @$UPLOAD_FILE -H "Content-Type: application/zip" -H "Authorization: token $GITHUB_ACCESS_TOKEN" $UPLOAD_URL$2

@@ -37,6 +37,7 @@ fi
 JSON_FILE=/tmp/create.json
 echo { > $JSON_FILE
 echo   \"tag_name\": \"${VER}\", >> $JSON_FILE
+echo   \"target_commitish\": \"${CIRCLE_REPONAME}\" >> $JSON_FILE
 echo   \"prerelease\": $PRE, >> $JSON_FILE
 echo   \"name\": \"${VER}\" >> $JSON_FILE
 echo } >> $JSON_FILE
